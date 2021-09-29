@@ -1,0 +1,906 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trieste.acquisition.sampler &#8212; trieste 0.7.0 documentation</title>
+    
+  <link href="../../../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+  <link rel="preload" as="script" href="../../../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="trieste.models" href="../../models/index.html" />
+    <link rel="prev" title="trieste.acquisition.rule" href="../rule/index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../../../index.html">
+  <img src="../../../../_static/logo.png" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../index.html">
+  Trieste
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../../index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../tutorials.html">
+  Tutorials
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/secondmind-labs/trieste" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.acquisition
+    </span>
+   </code>
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../multi_objective/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.acquisition.multi_objective
+      </span>
+     </code>
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../multi_objective/dominance/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         trieste.acquisition.multi_objective.dominance
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../multi_objective/pareto/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         trieste.acquisition.multi_objective.pareto
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../multi_objective/partition/index.html">
+       <code class="xref py py-mod docutils literal notranslate">
+        <span class="pre">
+         trieste.acquisition.multi_objective.partition
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../function/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.acquisition.function
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../optimizer/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.acquisition.optimizer
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../rule/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.acquisition.rule
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.acquisition.sampler
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../models/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.models
+    </span>
+   </code>
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../models/gpflow/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.models.gpflow
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../models/gpflux/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.models.gpflux
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../models/optimizer/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.models.optimizer
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../objectives/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.objectives
+    </span>
+   </code>
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../objectives/multi_objectives/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.objectives.multi_objectives
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../objectives/single_objectives/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.objectives.single_objectives
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../objectives/utils/index.html">
+     <code class="xref py py-mod docutils literal notranslate">
+      <span class="pre">
+       trieste.objectives.utils
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../utils/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.utils
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../ask_tell_optimization/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.ask_tell_optimization
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../bayesian_optimizer/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.bayesian_optimizer
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../data/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.data
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../observer/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.observer
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../space/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.space
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../types/index.html">
+   <code class="xref py py-mod docutils literal notranslate">
+    <span class="pre">
+     trieste.types
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-contents">
+   Module Contents
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trieste.acquisition.sampler.Sampler">
+     Sampler
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trieste.acquisition.sampler.Sampler.sample">
+       sample
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trieste.acquisition.sampler.ThompsonSampler">
+     ThompsonSampler
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trieste.acquisition.sampler.ExactThompsonSampler">
+     ExactThompsonSampler
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trieste.acquisition.sampler.ExactThompsonSampler.sample">
+       sample
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trieste.acquisition.sampler.GumbelSampler">
+     GumbelSampler
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trieste.acquisition.sampler.GumbelSampler.sample">
+       sample
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trieste.acquisition.sampler.IndependentReparametrizationSampler">
+     IndependentReparametrizationSampler
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trieste.acquisition.sampler.IndependentReparametrizationSampler.sample">
+       sample
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trieste.acquisition.sampler.BatchReparametrizationSampler">
+     BatchReparametrizationSampler
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trieste.acquisition.sampler.BatchReparametrizationSampler.sample">
+       sample
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trieste.acquisition.sampler.TrajectoryFunction">
+     TrajectoryFunction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler">
+     RandomFourierFeatureThompsonSampler
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler.get_trajectory">
+       get_trajectory
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler.sample">
+       sample
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="module-trieste.acquisition.sampler">
+<span id="trieste-acquisition-sampler"></span><h1><a class="reference internal" href="#module-trieste.acquisition.sampler" title="trieste.acquisition.sampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trieste.acquisition.sampler</span></code></a><a class="headerlink" href="#module-trieste.acquisition.sampler" title="Permalink to this headline">¶</a></h1>
+<p>This module is the home of the sampling functionality required by Trieste’s
+acquisiiton functions.</p>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="trieste.acquisition.sampler.Sampler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Sampler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../models/index.html#trieste.models.ProbabilisticModel" title="trieste.models.ProbabilisticModel"><span class="pre">trieste.models.ProbabilisticModel</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#Sampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.Sampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>A <a class="reference internal" href="#trieste.acquisition.sampler.Sampler" title="trieste.acquisition.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sampler</span></code></a> samples a specific quantity across a discrete set of points
+according to an underlying <code class="xref py py-class docutils literal notranslate"><span class="pre">ProbabilisticModel</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_size</strong> – The desired number of samples.</p></li>
+<li><p><strong>model</strong> – The model to sample from.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> is not positive.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="trieste.acquisition.sampler.Sampler.sample">
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">sample</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#Sampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.Sampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>at</strong> – Input points that define the sampler.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Samples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="trieste.acquisition.sampler.ThompsonSampler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ThompsonSampler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../models/index.html#trieste.models.ProbabilisticModel" title="trieste.models.ProbabilisticModel"><span class="pre">trieste.models.ProbabilisticModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_min_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#ThompsonSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.ThompsonSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trieste.acquisition.sampler.Sampler" title="trieste.acquisition.sampler.Sampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sampler</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>A <a class="reference internal" href="#trieste.acquisition.sampler.ThompsonSampler" title="trieste.acquisition.sampler.ThompsonSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThompsonSampler</span></code></a> samples either the minimum values or minimisers of a function
+modeled by an underlying <code class="xref py py-class docutils literal notranslate"><span class="pre">ProbabilisticModel</span></code> across a  discrete set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_size</strong> – The desired number of samples.</p></li>
+<li><p><strong>model</strong> – The model to sample from.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Sample_min_value</dt>
+<dd class="field-even"><p>If True then sample from the minimum value of the function,
+else sample the function’s minimiser.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> is not positive.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="trieste.acquisition.sampler.ExactThompsonSampler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">ExactThompsonSampler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../models/index.html#trieste.models.ProbabilisticModel" title="trieste.models.ProbabilisticModel"><span class="pre">trieste.models.ProbabilisticModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_min_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#ExactThompsonSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.ExactThompsonSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trieste.acquisition.sampler.ThompsonSampler" title="trieste.acquisition.sampler.ThompsonSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThompsonSampler</span></code></a></p>
+<p>This sampler provides exact Thompson samples of the objective function’s
+maximiser <span class="math notranslate nohighlight">\(x^*\)</span> over a discrete set of input locations.</p>
+<p>Although exact Thompson sampling is costly (incuring with an <span class="math notranslate nohighlight">\(O(N^3)\)</span> complexity to
+sample over a set of <cite>N</cite> locations), this method can be used for any probabilistic model
+with a sampling method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_size</strong> – The desired number of samples.</p></li>
+<li><p><strong>model</strong> – The model to sample from.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Sample_min_value</dt>
+<dd class="field-even"><p>If True then sample from the minimum value of the function,
+else sample the function’s minimiser.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> is not positive.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="trieste.acquisition.sampler.ExactThompsonSampler.sample">
+<code class="sig-name descname"><span class="pre">sample</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#ExactThompsonSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.ExactThompsonSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return exact samples from either the objective function’s minimser or its minimal value
+over the candidate set <cite>at</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>at</strong> – Where to sample the predictive distribution, with shape <cite>[N, D]</cite>, for points
+of dimension <cite>D</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The samples, of shape <cite>[S, D]</cite> (where <cite>S</cite> is the <cite>sample_size</cite>) if sampling
+the function’s minimser or shape <cite>[S, 1]</cite> if sampling the function’s mimimal value.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">at</span></code> has an invalid shape.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="trieste.acquisition.sampler.GumbelSampler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">GumbelSampler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../models/index.html#trieste.models.ProbabilisticModel" title="trieste.models.ProbabilisticModel"><span class="pre">trieste.models.ProbabilisticModel</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#GumbelSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.GumbelSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trieste.acquisition.sampler.ThompsonSampler" title="trieste.acquisition.sampler.ThompsonSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThompsonSampler</span></code></a></p>
+<p>This sampler follows <span id="id1">[<a class="reference internal" href="../../index.html#id8" title="Zi Wang and Stefanie Jegelka. Max-value entropy search for efficient bayesian optimization. arXiv preprint arXiv:1703.01968, 2017.">WJ17</a>]</span> and yields approximate samples of the objective
+minimum value <span class="math notranslate nohighlight">\(y^*\)</span> via the empirical cdf <span class="math notranslate nohighlight">\(\operatorname{Pr}(y^*&lt;y)\)</span>. The cdf
+is approximated by a Gumbel distribution</p>
+<div class="math notranslate nohighlight">
+\[\mathcal G(y; a, b) = 1 - e^{-e^\frac{y - a}{b}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(a, b \in \mathbb R\)</span> are chosen such that the quartiles of the Gumbel and cdf match.
+Samples are obtained via the Gumbel distribution by sampling <span class="math notranslate nohighlight">\(r\)</span> uniformly from
+<span class="math notranslate nohighlight">\([0, 1]\)</span> and applying the inverse probability integral transform
+<span class="math notranslate nohighlight">\(y = \mathcal G^{-1}(r; a, b)\)</span>.</p>
+<p>Note that the <a class="reference internal" href="#trieste.acquisition.sampler.GumbelSampler" title="trieste.acquisition.sampler.GumbelSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">GumbelSampler</span></code></a> can only sample a function’s minimal value and not
+its minimiser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_size</strong> – The desired number of samples.</p></li>
+<li><p><strong>model</strong> – The model to sample from.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> is not positive.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="trieste.acquisition.sampler.GumbelSampler.sample">
+<code class="sig-name descname"><span class="pre">sample</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#GumbelSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.GumbelSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return approximate samples from of the objective function’s minimum value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>at</strong> – Points at where to fit the Gumbel distribution, with shape <cite>[N, D]</cite>, for points
+of dimension <cite>D</cite>. We recommend scaling <cite>N</cite> with search space dimension.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The samples, of shape <cite>[S, 1]</cite>, where <cite>S</cite> is the <cite>sample_size</cite>.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">at</span></code> has an invalid shape.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="trieste.acquisition.sampler.IndependentReparametrizationSampler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">IndependentReparametrizationSampler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../models/index.html#trieste.models.ProbabilisticModel" title="trieste.models.ProbabilisticModel"><span class="pre">trieste.models.ProbabilisticModel</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#IndependentReparametrizationSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.IndependentReparametrizationSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trieste.acquisition.sampler.Sampler" title="trieste.acquisition.sampler.Sampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sampler</span></code></a></p>
+<p>This sampler employs the <em>reparameterization trick</em> to approximate samples from a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ProbabilisticModel</span></code>‘s predictive distribution as</p>
+<div class="math notranslate nohighlight">
+\[x \mapsto \mu(x) + \epsilon \sigma(x)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\epsilon \sim \mathcal N (0, 1)\)</span> is constant for a given sampler, thus ensuring
+samples form a continuous curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_size</strong> – The number of samples to take at each point. Must be positive.</p></li>
+<li><p><strong>model</strong> – The model to sample from.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> is not positive.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="trieste.acquisition.sampler.IndependentReparametrizationSampler.sample">
+<code class="sig-name descname"><span class="pre">sample</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#IndependentReparametrizationSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.IndependentReparametrizationSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return approximate samples from the <cite>model</cite> specified at <code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code>. Multiple calls to
+<a class="reference internal" href="#trieste.acquisition.sampler.IndependentReparametrizationSampler.sample" title="trieste.acquisition.sampler.IndependentReparametrizationSampler.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a>, for any given <a class="reference internal" href="#trieste.acquisition.sampler.IndependentReparametrizationSampler" title="trieste.acquisition.sampler.IndependentReparametrizationSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndependentReparametrizationSampler</span></code></a> and <code class="docutils literal notranslate"><span class="pre">at</span></code>, will
+produce the exact same samples. Calls to <a class="reference internal" href="#trieste.acquisition.sampler.IndependentReparametrizationSampler.sample" title="trieste.acquisition.sampler.IndependentReparametrizationSampler.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a> on <em>different</em>
+<a class="reference internal" href="#trieste.acquisition.sampler.IndependentReparametrizationSampler" title="trieste.acquisition.sampler.IndependentReparametrizationSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndependentReparametrizationSampler</span></code></a> instances will produce different samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>at</strong> – Where to sample the predictive distribution, with shape <cite>[…, 1, D]</cite>, for points
+of dimension <cite>D</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The samples, of shape <cite>[…, S, 1, L]</cite>, where <cite>S</cite> is the <cite>sample_size</cite> and <cite>L</cite> is
+the number of latent model dimensions.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">at</span></code> has an invalid shape.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="trieste.acquisition.sampler.BatchReparametrizationSampler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">BatchReparametrizationSampler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../models/index.html#trieste.models.ProbabilisticModel" title="trieste.models.ProbabilisticModel"><span class="pre">trieste.models.ProbabilisticModel</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#BatchReparametrizationSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.BatchReparametrizationSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trieste.acquisition.sampler.Sampler" title="trieste.acquisition.sampler.Sampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sampler</span></code></a></p>
+<p>This sampler employs the <em>reparameterization trick</em> to approximate batches of samples from a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ProbabilisticModel</span></code>‘s predictive joint distribution as</p>
+<div class="math notranslate nohighlight">
+\[x \mapsto \mu(x) + \epsilon L(x)\]</div>
+<p>where <span class="math notranslate nohighlight">\(L\)</span> is the Cholesky factor s.t. <span class="math notranslate nohighlight">\(LL^T\)</span> is the covariance, and
+<span class="math notranslate nohighlight">\(\epsilon \sim \mathcal N (0, 1)\)</span> is constant for a given sampler, thus ensuring samples
+form a continuous curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_size</strong> – The number of samples for each batch of points. Must be positive.</p></li>
+<li><p><strong>model</strong> – The model to sample from.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> is not positive.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="trieste.acquisition.sampler.BatchReparametrizationSampler.sample">
+<code class="sig-name descname"><span class="pre">sample</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jitter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">DEFAULTS.JITTER</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#BatchReparametrizationSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.BatchReparametrizationSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return approximate samples from the <cite>model</cite> specified at <code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code>. Multiple calls to
+<a class="reference internal" href="#trieste.acquisition.sampler.BatchReparametrizationSampler.sample" title="trieste.acquisition.sampler.BatchReparametrizationSampler.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a>, for any given <a class="reference internal" href="#trieste.acquisition.sampler.BatchReparametrizationSampler" title="trieste.acquisition.sampler.BatchReparametrizationSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchReparametrizationSampler</span></code></a> and <code class="docutils literal notranslate"><span class="pre">at</span></code>, will
+produce the exact same samples. Calls to <a class="reference internal" href="#trieste.acquisition.sampler.BatchReparametrizationSampler.sample" title="trieste.acquisition.sampler.BatchReparametrizationSampler.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a> on <em>different</em>
+<a class="reference internal" href="#trieste.acquisition.sampler.BatchReparametrizationSampler" title="trieste.acquisition.sampler.BatchReparametrizationSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchReparametrizationSampler</span></code></a> instances will produce different samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>at</strong> – Batches of query points at which to sample the predictive distribution, with
+shape <cite>[…, B, D]</cite>, for batches of size <cite>B</cite> of points of dimension <cite>D</cite>. Must have a
+consistent batch size across all calls to <a class="reference internal" href="#trieste.acquisition.sampler.BatchReparametrizationSampler.sample" title="trieste.acquisition.sampler.BatchReparametrizationSampler.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a> for any given
+<a class="reference internal" href="#trieste.acquisition.sampler.BatchReparametrizationSampler" title="trieste.acquisition.sampler.BatchReparametrizationSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchReparametrizationSampler</span></code></a>.</p></li>
+<li><p><strong>jitter</strong> – The size of the jitter to use when stabilising the Cholesky decomposition of
+the covariance matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The samples, of shape <cite>[…, S, B, L]</cite>, where <cite>S</cite> is the <cite>sample_size</cite>, <cite>B</cite> the
+number of points per batch, and <cite>L</cite> the dimension of the model’s predictive
+distribution.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If any of the following are true:
+- <code class="docutils literal notranslate"><span class="pre">at</span></code> is a scalar.
+- The batch size <cite>B</cite> of <code class="docutils literal notranslate"><span class="pre">at</span></code> is not positive.
+- The batch size <cite>B</cite> of <code class="docutils literal notranslate"><span class="pre">at</span></code> differs from that of previous calls.
+- <code class="docutils literal notranslate"><span class="pre">jitter</span></code> is negative.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt id="trieste.acquisition.sampler.TrajectoryFunction">
+<code class="sig-name descname"><span class="pre">TrajectoryFunction</span></code><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#TrajectoryFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.TrajectoryFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type alias for trajectory functions.</p>
+<p>An <a class="reference internal" href="#trieste.acquisition.sampler.TrajectoryFunction" title="trieste.acquisition.sampler.TrajectoryFunction"><code class="xref py py-const docutils literal notranslate"><span class="pre">TrajectoryFunction</span></code></a> evaluates a particular sample at a set of <cite>N</cite> query
+points (each of dimension <cite>D</cite>) i.e. takes input of shape <cite>[N, D]</cite> and returns
+shape <cite>[N, 1]</cite>.</p>
+<p>A key property of these trajectory functions is that the same sample draw is evaluated
+for all queries. This property is known as consistency.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">RandomFourierFeatureThompsonSampler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../models/index.html#trieste.models.ProbabilisticModel" title="trieste.models.ProbabilisticModel"><span class="pre">trieste.models.ProbabilisticModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../data/index.html#trieste.data.Dataset" title="trieste.data.Dataset"><span class="pre">trieste.data.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_min_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_features</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#RandomFourierFeatureThompsonSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#trieste.acquisition.sampler.ThompsonSampler" title="trieste.acquisition.sampler.ThompsonSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThompsonSampler</span></code></a></p>
+<p>This class builds functions that approximate a trajectory sampled from an underlying Gaussian
+process model. For tractibility, the Gaussian process is approximated with a Bayesian
+Linear model across a set of features sampled from the Fourier feature decomposition of
+the model’s kernel. See <span id="id2">[<a class="reference internal" href="../../index.html#id20" title="JM Hernández-Lobato, MW Hoffman, and Z Ghahramani. Predictive entropy search for efficient global optimization of black-box functions. Advances in Neural Information Processing Systems, 2014.">HernandezLHG14</a>]</span> for details.</p>
+<p>Achieving consistency (ensuring that the same sample draw for all evalutions of a particular
+trajectory function) for exact sample draws from a GP is prohibitively costly because it scales
+cubically with the number of query points. However, finite feature representations can be
+evaluated with constant cost regardless of the required number of queries.</p>
+<p>In particular, we approximate the Gaussian processes’ posterior samples as the finite feature
+approximation</p>
+<div class="math notranslate nohighlight">
+\[\hat{f}(x) = \sum_{i=1}^m \phi_i(x)\theta_i\]</div>
+<p>where <span class="math notranslate nohighlight">\(\phi_i\)</span> are m Fourier features and <span class="math notranslate nohighlight">\(\theta_i\)</span> are
+feature weights sampled from a posterior distribution that depends on the feature values at the
+model’s datapoints.</p>
+<p>Our implementation follows <span id="id3">[<a class="reference internal" href="../../index.html#id20" title="JM Hernández-Lobato, MW Hoffman, and Z Ghahramani. Predictive entropy search for efficient global optimization of black-box functions. Advances in Neural Information Processing Systems, 2014.">HernandezLHG14</a>]</span>, with our calculations
+differing slightly depending on properties of the problem. In particular,  we used different
+calculation strategies depending on the number of considered features m and the number
+of data points n.</p>
+<p>If <span class="math notranslate nohighlight">\(m&lt;n\)</span> then we follow Appendix A of <span id="id4">[<a class="reference internal" href="../../index.html#id20" title="JM Hernández-Lobato, MW Hoffman, and Z Ghahramani. Predictive entropy search for efficient global optimization of black-box functions. Advances in Neural Information Processing Systems, 2014.">HernandezLHG14</a>]</span> and calculate the
+posterior distribution for <span class="math notranslate nohighlight">\(\theta\)</span> following their Bayesian linear regression motivation,
+i.e. the computation revolves around an O(m^3)  inversion of a design matrix.</p>
+<p>If <span class="math notranslate nohighlight">\(n&lt;m\)</span> then we use the kernel trick to recast computation to revolve around an O(n^3)
+inversion of a gram matrix. As well as being more efficient in early BO
+steps (where <span class="math notranslate nohighlight">\(n&lt;m\)</span>), this second computation method allows must larger choices
+of m (as required to approximate very flexible kernels).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_size</strong> – The desired number of samples.</p></li>
+<li><p><strong>model</strong> – The model to sample from.</p></li>
+<li><p><strong>dataset</strong> – The data from the observer. Must be populated.</p></li>
+<li><p><strong>num_features</strong> – The number of features used to approximate the kernel. We use a default
+of 1000 as it typically perfoms well for a wide range of kernels. Note that very smooth
+kernels (e.g. RBF) can be well-approximated with fewer features.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Sample_min_value</dt>
+<dd class="field-even"><p>If True then sample from the minimum value of the function,
+else sample the function’s minimiser.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is empty.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler.get_trajectory">
+<code class="sig-name descname"><span class="pre">get_trajectory</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#trieste.acquisition.sampler.TrajectoryFunction" title="trieste.acquisition.sampler.TrajectoryFunction"><span class="pre">TrajectoryFunction</span></a><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#RandomFourierFeatureThompsonSampler.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler.get_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an approximate function draw (trajectory) by sampling weights
+and evaluating the feature functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A trajectory function representing an approximate trajectory from the Gaussian
+process, taking an input of shape <cite>[N, D]</cite> and returning shape <cite>[N, 1]</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler.sample">
+<code class="sig-name descname"><span class="pre">sample</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">at</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../../types/index.html#trieste.types.TensorType" title="trieste.types.TensorType"><span class="pre">trieste.types.TensorType</span></a><a class="reference internal" href="../../../../_modules/trieste/acquisition/sampler.html#RandomFourierFeatureThompsonSampler.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#trieste.acquisition.sampler.RandomFourierFeatureThompsonSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return approximate samples from either the objective function’s minimser or its minimal
+value over the candidate set <cite>at</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>at</strong> – Where to sample the predictive distribution, with shape <cite>[N, D]</cite>, for points
+of dimension <cite>D</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The samples, of shape <cite>[S, D]</cite> (where <cite>S</cite> is the <cite>sample_size</cite>) if sampling
+the function’s minimser or shape <cite>[S, 1]</cite> if sampling the function’s mimimal value.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.9)"><strong>ValueError</strong></a><strong> (or </strong><strong>InvalidArgumentError</strong><strong>)</strong> – If <code class="docutils literal notranslate"><span class="pre">at</span></code> has an invalid shape.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+              </div>
+              
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2020 The Trieste Contributors
+
+Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

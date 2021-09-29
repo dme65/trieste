@@ -1,0 +1,37 @@
+:orphan:
+
+:py:mod:`trieste.models.gpflow.utils`
+=====================================
+
+.. py:module:: trieste.models.gpflow.utils
+
+
+Module Contents
+---------------
+
+.. py:data:: M
+   
+
+   A type variable bound to :class:`tf.Module`. 
+
+
+.. py:function:: randomize_hyperparameters(object: gpflow.Module) -> None
+
+   Sets hyperparameters to random samples from their constrained domains or (if not constraints
+   are available) their prior distributions.
+
+   :param object: Any gpflow Module.
+
+
+.. py:function:: squeeze_hyperparameters(object: gpflow.Module, alpha: float = 0.01, epsilon: float = 1e-07) -> None
+
+   Squeezes the parameters to be strictly inside their range defined by the Sigmoid,
+   or strictly greater than the limit defined by the Shift+Softplus.
+   This avoids having Inf unconstrained values when the parameters are exactly at the boundary.
+
+   :param object: Any gpflow Module.
+   :param alpha: the proportion of the range with which to squeeze for the Sigmoid case
+   :param epsilon: the value with which to offset the shift for the Softplus case.
+   :raise ValueError: If ``alpha`` is not in (0,1) or epsilon <= 0
+
+

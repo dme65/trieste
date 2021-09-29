@@ -1,0 +1,110 @@
+:py:mod:`trieste.acquisition.optimizer`
+=======================================
+
+.. py:module:: trieste.acquisition.optimizer
+
+.. autoapi-nested-parse::
+
+   This module contains functionality for optimizing
+   :data:`~trieste.acquisition.AcquisitionFunction`\ s over :class:`~trieste.space.SearchSpace`\ s.
+
+
+
+Module Contents
+---------------
+
+.. py:data:: SP
+   
+
+   Type variable bound to :class:`~trieste.space.SearchSpace`. 
+
+
+.. py:exception:: FailedOptimizationError
+
+   Bases: :py:obj:`Exception`
+
+   Raised when an acquisition optimizer fails to optimize
+
+   Initialize self.  See help(type(self)) for accurate signature.
+
+
+.. py:data:: AcquisitionOptimizer
+   
+
+   Type alias for a function that returns the single point that maximizes an acquisition function over
+   a search space. For a search space with points of shape [D], and acquisition function with input
+   shape [..., B, D] output shape [..., 1], the :const:`AcquisitionOptimizer` return shape should be
+   [B, D].
+
+
+.. py:function:: automatic_optimizer_selector(space: trieste.space.SearchSpace, target_func: trieste.acquisition.function.AcquisitionFunction) -> trieste.types.TensorType
+
+   A wrapper around our :const:`AcquisitionOptimizer`s. This class performs
+   an :const:`AcquisitionOptimizer` appropriate for the
+   problem's :class:`~trieste.space.SearchSpace`.
+
+   :param space: The space of points over which to search, for points with shape [D].
+   :param target_func: The function to maximise, with input shape [..., 1, D] and output shape
+           [..., 1].
+   :return: The batch of points in ``space`` that maximises ``target_func``, with shape [1, D].
+
+
+.. py:function:: optimize_discrete(space: trieste.space.DiscreteSearchSpace, target_func: trieste.acquisition.function.AcquisitionFunction) -> trieste.types.TensorType
+
+   An :const:`AcquisitionOptimizer` for :class:'DiscreteSearchSpace' spaces and
+   batches of size of 1.
+
+   :param space: The space of points over which to search, for points with shape [D].
+   :param target_func: The function to maximise, with input shape [..., 1, D] and output shape
+           [..., 1].
+   :return: The **one** point in ``space`` that maximises ``target_func``, with shape [1, D].
+
+
+.. py:function:: generate_continuous_optimizer(num_initial_samples: int = 1000, sigmoid: bool = False, num_optimization_runs: int = 1, num_recovery_runs: int = 5) -> AcquisitionOptimizer[trieste.space.Box]
+
+   Generate a gradient-based acquisition optimizer for :class:'Box' spaces and batches
+   of size of 1. We perfom gradient-based optimization starting from the best location
+   across a sample of `num_initial_samples` random points.
+
+   This optimizer supports Scipy's L-BFGS-B and LBFGS optimizers. We
+   constrain L-BFGS's search with a sigmoid bijector that maps an unconstrained space into
+   the search space. In contrast, L-BFGS-B optimizes directly within the bounds of the
+   search space.
+
+   For challenging acquisition function optimizations, we run `num_optimization_runs` separate
+   optimizations, each starting from one of the top  `num_optimization_runs` initial query points.
+
+   If all `num_optimization_runs` optimizations fail to converge then we run up to
+   `num_recovery_runs` starting from random locations.
+
+   The default behavior of this method is to return a L-BFGS-B optimizer that performs
+   a single optimization from the best of 1000 initial locations. If this optimization fails then
+   we run up to `num_recovery_runs` recovery runs starting from random locations.
+
+   :param num_initial_samples: The size of the random sample used to find the starting point(s) of
+       the optimization.
+   :param sigmoid: If True then use L-BFGS, otherwise use L-BFGS-B.
+   :param num_optimization_runs: The number of separate optimizations to run.
+   :param num_recovery_runs: The maximum number of recovery optimization runs in case of failure.
+   :return: The acquisition optimizer.
+
+
+.. py:function:: batchify(batch_size_one_optimizer: AcquisitionOptimizer[SP], batch_size: int) -> AcquisitionOptimizer[SP]
+
+   A wrapper around our :const:`AcquisitionOptimizer`s. This class wraps a
+   :const:`AcquisitionOptimizer` to allow it to optimize batch acquisition functions.
+
+   :param batch_size_one_optimizer: An optimizer that returns only batch size one, i.e. produces a
+           single point with shape [1, D].
+   :param batch_size: The number of points in the batch.
+   :return: An :const:`AcquisitionOptimizer` that will provide a batch of points with shape [B, D].
+
+
+.. py:function:: generate_random_search_optimizer(num_samples: int = 1000) -> AcquisitionOptimizer[SP]
+
+   Generate an acquisition optimizer that samples `num_samples` random points across the space.
+
+   :param num_samples: The number of random points to sample.
+   :return: The acquisition optimizer.
+
+

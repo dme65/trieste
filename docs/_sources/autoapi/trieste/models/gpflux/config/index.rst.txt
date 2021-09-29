@@ -1,0 +1,34 @@
+:orphan:
+
+:py:mod:`trieste.models.gpflux.config`
+======================================
+
+.. py:module:: trieste.models.gpflux.config
+
+
+Module Contents
+---------------
+
+.. py:class:: GPfluxModelConfig
+
+   Bases: :py:obj:`trieste.models.config.ModelConfig`
+
+   Specification for building a GPflux instance of
+   :class:`~trieste.models.TrainableProbabilisticModel`. Note that `optimizer_args` are not used
+   for GPflux models.
+
+   .. py:method:: supported_models(self) -> dict[Any, collections.abc.Callable[[Any, tensorflow.optimizers.Optimizer], trieste.models.interfaces.TrainableProbabilisticModel]]
+
+      Defines all models supported by certain model type (e.g. Gaussian process implementation).
+      This method has to be specified by a model type specific subclass.
+
+      :return: A mapping of third-party model types to :class:`CustomTrainable` classes that wrap
+          models of those types.
+
+
+   .. py:method:: create_model_interface(self) -> trieste.models.interfaces.TrainableProbabilisticModel
+
+      :return: A model built from this model configuration.
+
+
+

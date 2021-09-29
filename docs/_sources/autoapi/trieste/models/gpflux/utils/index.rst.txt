@@ -1,0 +1,17 @@
+:orphan:
+
+:py:mod:`trieste.models.gpflux.utils`
+=====================================
+
+.. py:module:: trieste.models.gpflux.utils
+
+
+Module Contents
+---------------
+
+.. py:data:: M
+   
+
+   A type variable bound to :class:`tf.Module`. 
+
+

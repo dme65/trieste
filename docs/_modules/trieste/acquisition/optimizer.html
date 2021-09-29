@@ -1,0 +1,477 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trieste.acquisition.optimizer &#8212; trieste 0.7.0 documentation</title>
+    
+  <link href="../../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../../index.html">
+  <img src="../../../_static/logo.png" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../index.html">
+  Trieste
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../autoapi/trieste/index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../tutorials.html">
+  Tutorials
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/secondmind-labs/trieste" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for trieste.acquisition.optimizer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2020 The Trieste Contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains functionality for optimizing</span>
+<span class="sd">:data:`~trieste.acquisition.AcquisitionFunction`\ s over :class:`~trieste.space.SearchSpace`\ s.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="kn">import</span> <span class="nn">gpflow</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">spo</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">OptimizeResult</span>
+
+<span class="kn">from</span> <span class="nn">..space</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">DiscreteSearchSpace</span><span class="p">,</span> <span class="n">SearchSpace</span>
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">TensorType</span>
+<span class="kn">from</span> <span class="nn">.function</span> <span class="kn">import</span> <span class="n">AcquisitionFunction</span>
+
+<div class="viewcode-block" id="SP"><a class="viewcode-back" href="../../../autoapi/trieste/acquisition/optimizer/index.html#trieste.acquisition.optimizer.SP">[docs]</a><span class="n">SP</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;SP&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">SearchSpace</span><span class="p">)</span></div>
+<span class="sd">&quot;&quot;&quot; Type variable bound to :class:`~trieste.space.SearchSpace`. &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="FailedOptimizationError"><a class="viewcode-back" href="../../../autoapi/trieste/acquisition/optimizer/index.html#trieste.acquisition.optimizer.FailedOptimizationError">[docs]</a><span class="k">class</span> <span class="nc">FailedOptimizationError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span></div>
+    <span class="sd">&quot;&quot;&quot;Raised when an acquisition optimizer fails to optimize&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="AcquisitionOptimizer"><a class="viewcode-back" href="../../../autoapi/trieste/acquisition/optimizer/index.html#trieste.acquisition.optimizer.AcquisitionOptimizer">[docs]</a><span class="n">AcquisitionOptimizer</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SP</span><span class="p">,</span> <span class="n">AcquisitionFunction</span><span class="p">],</span> <span class="n">TensorType</span><span class="p">]</span></div>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Type alias for a function that returns the single point that maximizes an acquisition function over</span>
+<span class="sd">a search space. For a search space with points of shape [D], and acquisition function with input</span>
+<span class="sd">shape [..., B, D] output shape [..., 1], the :const:`AcquisitionOptimizer` return shape should be</span>
+<span class="sd">[B, D].</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="automatic_optimizer_selector"><a class="viewcode-back" href="../../../autoapi/trieste/acquisition/optimizer/index.html#trieste.acquisition.optimizer.automatic_optimizer_selector">[docs]</a><span class="k">def</span> <span class="nf">automatic_optimizer_selector</span><span class="p">(</span>
+    <span class="n">space</span><span class="p">:</span> <span class="n">SearchSpace</span><span class="p">,</span> <span class="n">target_func</span><span class="p">:</span> <span class="n">AcquisitionFunction</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A wrapper around our :const:`AcquisitionOptimizer`s. This class performs</span>
+<span class="sd">    an :const:`AcquisitionOptimizer` appropriate for the</span>
+<span class="sd">    problem&#39;s :class:`~trieste.space.SearchSpace`.</span>
+
+<span class="sd">    :param space: The space of points over which to search, for points with shape [D].</span>
+<span class="sd">    :param target_func: The function to maximise, with input shape [..., 1, D] and output shape</span>
+<span class="sd">            [..., 1].</span>
+<span class="sd">    :return: The batch of points in ``space`` that maximises ``target_func``, with shape [1, D].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">DiscreteSearchSpace</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">optimize_discrete</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">target_func</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">Box</span><span class="p">):</span>
+        <span class="n">num_samples</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">lower</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">generate_continuous_optimizer</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)(</span><span class="n">space</span><span class="p">,</span> <span class="n">target_func</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&quot;&quot; No optimizer currentely supports acquisition function</span>
+<span class="s2">                    maximisation over search spaces of type </span><span class="si">{</span><span class="n">space</span><span class="si">}</span><span class="s2">.</span>
+<span class="s2">                    Try specifying the optimize_random optimizer&quot;&quot;&quot;</span></div>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="optimize_discrete"><a class="viewcode-back" href="../../../autoapi/trieste/acquisition/optimizer/index.html#trieste.acquisition.optimizer.optimize_discrete">[docs]</a><span class="k">def</span> <span class="nf">optimize_discrete</span><span class="p">(</span><span class="n">space</span><span class="p">:</span> <span class="n">DiscreteSearchSpace</span><span class="p">,</span> <span class="n">target_func</span><span class="p">:</span> <span class="n">AcquisitionFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An :const:`AcquisitionOptimizer` for :class:&#39;DiscreteSearchSpace&#39; spaces and</span>
+<span class="sd">    batches of size of 1.</span>
+
+<span class="sd">    :param space: The space of points over which to search, for points with shape [D].</span>
+<span class="sd">    :param target_func: The function to maximise, with input shape [..., 1, D] and output shape</span>
+<span class="sd">            [..., 1].</span>
+<span class="sd">    :return: The **one** point in ``space`` that maximises ``target_func``, with shape [1, D].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">target_func_values</span> <span class="o">=</span> <span class="n">target_func</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">points</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">debugging</span><span class="o">.</span><span class="n">assert_shapes</span><span class="p">(</span>
+        <span class="p">[(</span><span class="n">target_func_values</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))],</span>
+        <span class="n">message</span><span class="o">=</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The result of function target_func has an invalid shape:&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">target_func_values</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">max_value_idx</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">target_func_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">space</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">max_value_idx</span> <span class="p">:</span> <span class="n">max_value_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="generate_continuous_optimizer"><a class="viewcode-back" href="../../../autoapi/trieste/acquisition/optimizer/index.html#trieste.acquisition.optimizer.generate_continuous_optimizer">[docs]</a><span class="k">def</span> <span class="nf">generate_continuous_optimizer</span><span class="p">(</span>
+    <span class="n">num_initial_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="n">sigmoid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">num_optimization_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_recovery_runs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AcquisitionOptimizer</span><span class="p">[</span><span class="n">Box</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a gradient-based acquisition optimizer for :class:&#39;Box&#39; spaces and batches</span>
+<span class="sd">    of size of 1. We perfom gradient-based optimization starting from the best location</span>
+<span class="sd">    across a sample of `num_initial_samples` random points.</span>
+
+<span class="sd">    This optimizer supports Scipy&#39;s L-BFGS-B and LBFGS optimizers. We</span>
+<span class="sd">    constrain L-BFGS&#39;s search with a sigmoid bijector that maps an unconstrained space into</span>
+<span class="sd">    the search space. In contrast, L-BFGS-B optimizes directly within the bounds of the</span>
+<span class="sd">    search space.</span>
+
+<span class="sd">    For challenging acquisition function optimizations, we run `num_optimization_runs` separate</span>
+<span class="sd">    optimizations, each starting from one of the top  `num_optimization_runs` initial query points.</span>
+
+<span class="sd">    If all `num_optimization_runs` optimizations fail to converge then we run up to</span>
+<span class="sd">    `num_recovery_runs` starting from random locations.</span>
+
+<span class="sd">    The default behavior of this method is to return a L-BFGS-B optimizer that performs</span>
+<span class="sd">    a single optimization from the best of 1000 initial locations. If this optimization fails then</span>
+<span class="sd">    we run up to `num_recovery_runs` recovery runs starting from random locations.</span>
+
+<span class="sd">    :param num_initial_samples: The size of the random sample used to find the starting point(s) of</span>
+<span class="sd">        the optimization.</span>
+<span class="sd">    :param sigmoid: If True then use L-BFGS, otherwise use L-BFGS-B.</span>
+<span class="sd">    :param num_optimization_runs: The number of separate optimizations to run.</span>
+<span class="sd">    :param num_recovery_runs: The maximum number of recovery optimization runs in case of failure.</span>
+<span class="sd">    :return: The acquisition optimizer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">num_initial_samples</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num_initial_samples must be positive, got </span><span class="si">{</span><span class="n">num_initial_samples</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_optimization_runs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num_optimization_runs must be positive, got </span><span class="si">{</span><span class="n">num_optimization_runs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_initial_samples</span> <span class="o">&lt;</span> <span class="n">num_optimization_runs</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            num_initial_samples </span><span class="si">{</span><span class="n">num_initial_samples</span><span class="si">}</span><span class="s2"> must be at</span>
+<span class="s2">            least num_optimization_runs </span><span class="si">{</span><span class="n">num_optimization_runs</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_recovery_runs</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num_recovery_runs must be zero or greater, got </span><span class="si">{</span><span class="n">num_recovery_runs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">optimize_continuous</span><span class="p">(</span><span class="n">space</span><span class="p">:</span> <span class="n">Box</span><span class="p">,</span> <span class="n">target_func</span><span class="p">:</span> <span class="n">AcquisitionFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A gradient-based :const:`AcquisitionOptimizer` for :class:&#39;Box&#39; spaces and batches</span>
+<span class="sd">        of size of 1.</span>
+
+<span class="sd">        :param space: The space over which to search.</span>
+<span class="sd">        :param target_func: The function to maximise, with input shape [..., 1, D] and output shape</span>
+<span class="sd">                [..., 1].</span>
+<span class="sd">        :return: The **one** point in ``space`` that maximises ``target_func``, with shape [1, D].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">trial_search_space</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">num_initial_samples</span><span class="p">)</span>  <span class="c1"># [num_initial_samples, D]</span>
+        <span class="n">target_func_values</span> <span class="o">=</span> <span class="n">target_func</span><span class="p">(</span><span class="n">trial_search_space</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># [num_samples, 1]</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">top_k_indicies</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span>
+            <span class="n">target_func_values</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="n">num_optimization_runs</span>
+        <span class="p">)</span>  <span class="c1"># [num_optimization_runs]</span>
+        <span class="n">initial_points</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">trial_search_space</span><span class="p">,</span> <span class="n">top_k_indicies</span><span class="p">)</span>  <span class="c1"># [num_optimization_runs, D]</span>
+
+        <span class="k">if</span> <span class="n">sigmoid</span><span class="p">:</span>  <span class="c1"># use scipy&#39;s L-BFGS optimizer with a sigmoid transform</span>
+            <span class="n">bijector</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">bijectors</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">space</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">space</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span>
+            <span class="n">opt_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># use scipy&#39;s L-BFGS-B optimizer</span>
+            <span class="n">bijector</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">bijectors</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
+            <span class="n">opt_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="n">spo</span><span class="o">.</span><span class="n">Bounds</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">space</span><span class="o">.</span><span class="n">upper</span><span class="p">)}</span>
+
+        <span class="n">variable</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">bijector</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">initial_points</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]))</span>  <span class="c1"># [1, D]</span>
+
+        <span class="k">def</span> <span class="nf">_objective</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">target_func</span><span class="p">(</span><span class="n">bijector</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">variable</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]))</span>  <span class="c1"># [1]</span>
+
+        <span class="k">def</span> <span class="nf">_perform_optimization</span><span class="p">(</span><span class="n">starting_point</span><span class="p">:</span> <span class="n">TensorType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizeResult</span><span class="p">:</span>
+            <span class="n">variable</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">bijector</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">starting_point</span><span class="p">))</span>  <span class="c1"># [1, D]</span>
+            <span class="k">return</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Scipy</span><span class="p">()</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">_objective</span><span class="p">,</span> <span class="p">(</span><span class="n">variable</span><span class="p">,),</span> <span class="o">**</span><span class="n">opt_kwargs</span><span class="p">)</span>
+
+        <span class="n">successful_optimization</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">chosen_point</span> <span class="o">=</span> <span class="n">bijector</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>  <span class="c1"># [1, D]</span>
+        <span class="n">chosen_point_score</span> <span class="o">=</span> <span class="n">target_func</span><span class="p">(</span><span class="n">chosen_point</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># [1, 1]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span>
+            <span class="n">num_optimization_runs</span>
+        <span class="p">):</span>  <span class="c1"># perform optimization for each chosen starting point</span>
+            <span class="n">opt_result</span> <span class="o">=</span> <span class="n">_perform_optimization</span><span class="p">(</span><span class="n">initial_points</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">opt_result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+                <span class="n">successful_optimization</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="n">new_point</span> <span class="o">=</span> <span class="n">bijector</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>  <span class="c1"># [1, D]</span>
+                <span class="n">new_point_score</span> <span class="o">=</span> <span class="n">target_func</span><span class="p">(</span><span class="n">new_point</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># [1, 1]</span>
+
+                <span class="k">if</span> <span class="n">new_point_score</span> <span class="o">&gt;</span> <span class="n">chosen_point_score</span><span class="p">:</span>  <span class="c1"># if found a better point then keep</span>
+                    <span class="n">chosen_point</span> <span class="o">=</span> <span class="n">new_point</span>  <span class="c1"># [1, D]</span>
+                    <span class="n">chosen_point_score</span> <span class="o">=</span> <span class="n">new_point_score</span>  <span class="c1"># [1, 1]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">successful_optimization</span><span class="p">:</span>  <span class="c1"># if all optimizations failed then try from random start</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">num_recovery_runs</span><span class="p">):</span>
+                <span class="n">opt_result</span> <span class="o">=</span> <span class="n">_perform_optimization</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">opt_result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+                    <span class="n">chosen_point</span> <span class="o">=</span> <span class="n">bijector</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>  <span class="c1"># [1, D]</span>
+                    <span class="n">successful_optimization</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">successful_optimization</span><span class="p">:</span>  <span class="c1"># return error if still failed</span>
+                <span class="k">raise</span> <span class="n">FailedOptimizationError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    Acquisition function optimization failed,</span>
+<span class="s2">                    even after </span><span class="si">{</span><span class="n">num_recovery_runs</span> <span class="o">+</span> <span class="n">num_optimization_runs</span><span class="si">}</span><span class="s2"> restarts.</span>
+<span class="s2">                    &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">chosen_point</span>  <span class="c1"># [1, D]</span>
+
+    <span class="k">return</span> <span class="n">optimize_continuous</span></div>
+
+
+<div class="viewcode-block" id="batchify"><a class="viewcode-back" href="../../../autoapi/trieste/acquisition/optimizer/index.html#trieste.acquisition.optimizer.batchify">[docs]</a><span class="k">def</span> <span class="nf">batchify</span><span class="p">(</span>
+    <span class="n">batch_size_one_optimizer</span><span class="p">:</span> <span class="n">AcquisitionOptimizer</span><span class="p">[</span><span class="n">SP</span><span class="p">],</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AcquisitionOptimizer</span><span class="p">[</span><span class="n">SP</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A wrapper around our :const:`AcquisitionOptimizer`s. This class wraps a</span>
+<span class="sd">    :const:`AcquisitionOptimizer` to allow it to optimize batch acquisition functions.</span>
+
+<span class="sd">    :param batch_size_one_optimizer: An optimizer that returns only batch size one, i.e. produces a</span>
+<span class="sd">            single point with shape [1, D].</span>
+<span class="sd">    :param batch_size: The number of points in the batch.</span>
+<span class="sd">    :return: An :const:`AcquisitionOptimizer` that will provide a batch of points with shape [B, D].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">batch_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;batch_size must be positive, got </span><span class="si">{</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">optimizer</span><span class="p">(</span><span class="n">search_space</span><span class="p">:</span> <span class="n">SP</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">AcquisitionFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>
+        <span class="n">expanded_search_space</span> <span class="o">=</span> <span class="n">search_space</span> <span class="o">**</span> <span class="n">batch_size</span>  <span class="c1"># points have shape [B * D]</span>
+
+        <span class="k">def</span> <span class="nf">target_func_with_vectorized_inputs</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">:</span> <span class="n">TensorType</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>  <span class="c1"># [..., 1, B * D] -&gt; [..., 1]</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="n">vectorized_points</span> <span class="o">=</span> <span class="n">batch_size_one_optimizer</span><span class="p">(</span>  <span class="c1"># [1, B * D]</span>
+            <span class="n">expanded_search_space</span><span class="p">,</span> <span class="n">target_func_with_vectorized_inputs</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">vectorized_points</span><span class="p">,</span> <span class="p">[</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># [B, D]</span>
+
+    <span class="k">return</span> <span class="n">optimizer</span></div>
+
+
+<div class="viewcode-block" id="generate_random_search_optimizer"><a class="viewcode-back" href="../../../autoapi/trieste/acquisition/optimizer/index.html#trieste.acquisition.optimizer.generate_random_search_optimizer">[docs]</a><span class="k">def</span> <span class="nf">generate_random_search_optimizer</span><span class="p">(</span><span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AcquisitionOptimizer</span><span class="p">[</span><span class="n">SP</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate an acquisition optimizer that samples `num_samples` random points across the space.</span>
+
+<span class="sd">    :param num_samples: The number of random points to sample.</span>
+<span class="sd">    :return: The acquisition optimizer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">num_samples</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num_samples must be positive, got </span><span class="si">{</span><span class="n">num_samples</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">optimize_random</span><span class="p">(</span><span class="n">space</span><span class="p">:</span> <span class="n">SP</span><span class="p">,</span> <span class="n">target_func</span><span class="p">:</span> <span class="n">AcquisitionFunction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A random search :const:`AcquisitionOptimizer` defined for</span>
+<span class="sd">        any :class:&#39;SearchSpace&#39; with a :meth:`sample` and for batches of size of 1.</span>
+<span class="sd">        If we have a :class:&#39;DiscreteSearchSpace&#39; with fewer than `num_samples` points,</span>
+<span class="sd">        then we query all the points in the space.</span>
+
+<span class="sd">        :param space: The space over which to search.</span>
+<span class="sd">        :param target_func: The function to maximise, with input shape [..., 1, D] and output shape</span>
+<span class="sd">                [..., 1].</span>
+<span class="sd">        :return: The **one** point in ``space`` that maximises ``target_func``, with shape [1, D].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">DiscreteSearchSpace</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">num_samples</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">points</span><span class="p">)):</span>
+            <span class="n">_num_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_num_samples</span> <span class="o">=</span> <span class="n">num_samples</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">_num_samples</span><span class="p">)</span>
+        <span class="n">target_func_values</span> <span class="o">=</span> <span class="n">target_func</span><span class="p">(</span><span class="n">samples</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">max_value_idx</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">target_func_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">samples</span><span class="p">[</span><span class="n">max_value_idx</span> <span class="p">:</span> <span class="n">max_value_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">optimize_random</span></div>
+</pre></div>
+
+              </div>
+              
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2020 The Trieste Contributors
+
+Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

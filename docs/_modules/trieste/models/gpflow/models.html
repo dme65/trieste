@@ -1,0 +1,651 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trieste.models.gpflow.models &#8212; trieste 0.7.0 documentation</title>
+    
+  <link href="../../../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    
+  <link rel="preload" as="script" href="../../../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../../../index.html">
+  <img src="../../../../_static/logo.png" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../index.html">
+  Trieste
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../autoapi/trieste/index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../tutorials.html">
+  Tutorials
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/secondmind-labs/trieste" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for trieste.models.gpflow.models</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 The Trieste Contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">gpflow</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">tensorflow_probability</span> <span class="k">as</span> <span class="nn">tfp</span>
+<span class="kn">from</span> <span class="nn">gpflow.models</span> <span class="kn">import</span> <span class="n">GPR</span><span class="p">,</span> <span class="n">SGPR</span><span class="p">,</span> <span class="n">SVGP</span><span class="p">,</span> <span class="n">VGP</span>
+<span class="kn">from</span> <span class="nn">gpflow.utilities</span> <span class="kn">import</span> <span class="n">multiple_assign</span><span class="p">,</span> <span class="n">read_values</span>
+
+<span class="kn">from</span> <span class="nn">...data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">...types</span> <span class="kn">import</span> <span class="n">TensorType</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">DEFAULTS</span><span class="p">,</span> <span class="n">jit</span>
+<span class="kn">from</span> <span class="nn">..interfaces</span> <span class="kn">import</span> <span class="n">TrainableProbabilisticModel</span>
+<span class="kn">from</span> <span class="nn">..optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span><span class="p">,</span> <span class="n">TFOptimizer</span>
+<span class="kn">from</span> <span class="nn">.interface</span> <span class="kn">import</span> <span class="n">GPflowPredictor</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">assert_data_is_compatible</span><span class="p">,</span> <span class="n">randomize_hyperparameters</span><span class="p">,</span> <span class="n">squeeze_hyperparameters</span>
+
+
+<div class="viewcode-block" id="GaussianProcessRegression"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.GaussianProcessRegression">[docs]</a><span class="k">class</span> <span class="nc">GaussianProcessRegression</span><span class="p">(</span><span class="n">GPflowPredictor</span><span class="p">,</span> <span class="n">TrainableProbabilisticModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`TrainableProbabilisticModel` wrapper for a GPflow :class:`~gpflow.models.GPR`</span>
+<span class="sd">    or :class:`~gpflow.models.SGPR`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">GPR</span> <span class="o">|</span> <span class="n">SGPR</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">num_kernel_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param model: The GPflow model to wrap.</span>
+<span class="sd">        :param optimizer: The optimizer with which to train the model. Defaults to</span>
+<span class="sd">            :class:`~trieste.models.optimizer.Optimizer` with :class:`~gpflow.optimizers.Scipy`.</span>
+<span class="sd">        :param num_kernel_samples: Number of randomly sampled kernels (for each kernel parameter) to</span>
+<span class="sd">            evaluate before beginning model optimization. Therefore, for a kernel with `p`</span>
+<span class="sd">            (vector-valued) parameters, we evaluate `p * num_kernel_samples` kernels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+
+        <span class="k">if</span> <span class="n">num_kernel_samples</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;num_kernel_samples must be greater or equal to zero but got </span><span class="si">{</span><span class="n">num_kernel_samples</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_kernel_samples</span> <span class="o">=</span> <span class="n">num_kernel_samples</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_variable_model_data</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;GaussianProcessRegression(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="GaussianProcessRegression.model"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.GaussianProcessRegression.model">[docs]</a>    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GPR</span> <span class="o">|</span> <span class="n">SGPR</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span></div>
+
+    <span class="k">def</span> <span class="nf">_ensure_variable_model_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># GPflow stores the data in Tensors. However, since we want to be able to update the data</span>
+        <span class="c1"># without having to retrace the acquisition functions, put it in Variables instead.</span>
+        <span class="c1"># Data has to be stored in variables with dynamic shape to allow for changes</span>
+        <span class="c1"># Sometimes, for instance after serialization-deserialization, the shape can be overriden</span>
+        <span class="c1"># Thus here we ensure data is stored in dynamic shape Variables</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+            <span class="c1"># both query points and observations are in right shape</span>
+            <span class="c1"># nothing to do</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+            <span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="GaussianProcessRegression.update"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.GaussianProcessRegression.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_variable_model_data</span><span class="p">()</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+
+        <span class="n">assert_data_is_compatible</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">dataset</span><span class="o">.</span><span class="n">query_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+
+        <span class="k">if</span> <span class="n">dataset</span><span class="o">.</span><span class="n">observations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">query_points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">observations</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GaussianProcessRegression.covariance_between_points"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.GaussianProcessRegression.covariance_between_points">[docs]</a>    <span class="k">def</span> <span class="nf">covariance_between_points</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">query_points_1</span><span class="p">:</span> <span class="n">TensorType</span><span class="p">,</span> <span class="n">query_points_2</span><span class="p">:</span> <span class="n">TensorType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the posterior covariance between sets of query points.</span>
+
+<span class="sd">        .. math:: \Sigma_{12} = K_{12} - K_{x1}(K_{xx} + \sigma^2 I)^{-1}K_{x2}</span>
+
+<span class="sd">        :param query_points_1: Set of query points with shape [N, D]</span>
+<span class="sd">        :param query_points_2: Sets of query points with shape [M, D]</span>
+
+<span class="sd">        :return: Covariance matrix between the sets of query points with shape [N, M]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">SGPR</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Covariance between points is not supported for SGPR.&quot;</span><span class="p">)</span>
+
+        <span class="n">tf</span><span class="o">.</span><span class="n">debugging</span><span class="o">.</span><span class="n">assert_shapes</span><span class="p">([(</span><span class="n">query_points_1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">]),</span> <span class="p">(</span><span class="n">query_points_2</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">])])</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">num_data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">fill</span><span class="p">([</span><span class="n">num_data</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">variance</span><span class="p">))</span>
+
+        <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">K</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span>
+
+        <span class="n">Kx1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">query_points_1</span><span class="p">)</span>
+        <span class="n">Linv_Kx1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">triangular_solve</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">Kx1</span><span class="p">)</span>
+
+        <span class="n">Kx2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">query_points_2</span><span class="p">)</span>
+        <span class="n">Linv_Kx2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">triangular_solve</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">Kx2</span><span class="p">)</span>
+
+        <span class="n">K12</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">query_points_1</span><span class="p">,</span> <span class="n">query_points_2</span><span class="p">)</span>
+        <span class="n">cov</span> <span class="o">=</span> <span class="n">K12</span> <span class="o">-</span> <span class="n">tf</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Linv_Kx1</span><span class="p">),</span> <span class="n">Linv_Kx2</span><span class="p">,</span> <span class="p">[[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]])</span>
+
+        <span class="n">tf</span><span class="o">.</span><span class="n">debugging</span><span class="o">.</span><span class="n">assert_shapes</span><span class="p">(</span>
+            <span class="p">[(</span><span class="n">query_points_1</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">]),</span> <span class="p">(</span><span class="n">query_points_2</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">]),</span> <span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">])]</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cov</span></div>
+
+<div class="viewcode-block" id="GaussianProcessRegression.optimize"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.GaussianProcessRegression.optimize">[docs]</a>    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Optimize the model with the specified `dataset`.</span>
+
+<span class="sd">        For :class:`GaussianProcessRegression`, we (optionally) try multiple randomly sampled</span>
+<span class="sd">        kernel parameter configurations as well as the configuration specified when initializing</span>
+<span class="sd">        the kernel. The best configuration is used as the starting point for model optimization.</span>
+
+<span class="sd">        For trainable parameters constrained to lie in a finite interval (through a sigmoid</span>
+<span class="sd">        bijector), we begin model optimization from the best of a random sample from these</span>
+<span class="sd">        parameters&#39; acceptable domains.</span>
+
+<span class="sd">        For trainable parameters without constraints but with priors, we begin model optimization</span>
+<span class="sd">        from the best of a random sample from these parameters&#39; priors.</span>
+
+<span class="sd">        For trainable parameters with neither priors nor constraints, we begin optimization from</span>
+<span class="sd">        their initial values.</span>
+
+<span class="sd">        :param dataset: The data with which to optimize the `model`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">num_trainable_params_with_priors_or_constraints</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">trainable_parameters</span>
+                <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">prior</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">bijector</span><span class="p">,</span> <span class="n">tfp</span><span class="o">.</span><span class="n">bijectors</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">min</span><span class="p">(</span><span class="n">num_trainable_params_with_priors_or_constraints</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_kernel_samples</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+        <span class="p">):</span>  <span class="c1"># Find a promising kernel initialization</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">find_best_model_initialization</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_num_kernel_samples</span> <span class="o">*</span> <span class="n">num_trainable_params_with_priors_or_constraints</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GaussianProcessRegression.find_best_model_initialization"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.GaussianProcessRegression.find_best_model_initialization">[docs]</a>    <span class="k">def</span> <span class="nf">find_best_model_initialization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_kernel_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test `num_kernel_samples` models with sampled kernel parameters. The model&#39;s kernel</span>
+<span class="sd">        parameters are then set to the sample achieving maximal likelihood.</span>
+
+<span class="sd">        :param num_kernel_samples: Number of randomly sampled kernels to evaluate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+        <span class="k">def</span> <span class="nf">evaluate_loss_of_model_parameters</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+            <span class="n">randomize_hyperparameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">training_loss</span><span class="p">()</span>
+
+        <span class="n">squeeze_hyperparameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">current_best_parameters</span> <span class="o">=</span> <span class="n">read_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">min_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">training_loss</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tf</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="n">num_kernel_samples</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">train_loss</span> <span class="o">=</span> <span class="n">evaluate_loss_of_model_parameters</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">tf</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">InvalidArgumentError</span><span class="p">:</span>  <span class="c1"># allow badly specified kernel params</span>
+                <span class="n">train_loss</span> <span class="o">=</span> <span class="mf">1e100</span>
+
+            <span class="k">if</span> <span class="n">train_loss</span> <span class="o">&lt;</span> <span class="n">min_loss</span><span class="p">:</span>  <span class="c1"># only keep best kernel params</span>
+                <span class="n">min_loss</span> <span class="o">=</span> <span class="n">train_loss</span>
+                <span class="n">current_best_parameters</span> <span class="o">=</span> <span class="n">read_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="n">multiple_assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">current_best_parameters</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="NumDataPropertyMixin"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.NumDataPropertyMixin">[docs]</a><span class="k">class</span> <span class="nc">NumDataPropertyMixin</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Mixin class for exposing num_data as a property, stored in a tf.Variable. This is to work</span>
+<span class="sd">    around GPFlow storing it as a number, which prevents us from updating it without retracing.</span>
+<span class="sd">    The property is required due to the way num_data is used in the model elbo methods.</span>
+
+<span class="sd">    Note that this doesn&#39;t support a num_data value of None.</span>
+
+<span class="sd">    This should be removed once GPFlow is updated to support Variables as num_data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_num_data</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">num_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorType</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_data</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+
+    <span class="nd">@num_data</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">num_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">TensorType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_data</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SVGPWrapper"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.SVGPWrapper">[docs]</a><span class="k">class</span> <span class="nc">SVGPWrapper</span><span class="p">(</span><span class="n">SVGP</span><span class="p">,</span> <span class="n">NumDataPropertyMixin</span><span class="p">):</span></div>
+    <span class="sd">&quot;&quot;&quot;A wrapper around GPFlow&#39;s SVGP class that stores num_data in a tf.Variable and exposes</span>
+<span class="sd">    it as a property.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="SparseVariational"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.SparseVariational">[docs]</a><span class="k">class</span> <span class="nc">SparseVariational</span><span class="p">(</span><span class="n">GPflowPredictor</span><span class="p">,</span> <span class="n">TrainableProbabilisticModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`TrainableProbabilisticModel` wrapper for a GPflow :class:`~gpflow.models.SVGP`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">SVGP</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param model: The underlying GPflow sparse variational model.</span>
+<span class="sd">        :param optimizer: The optimizer with which to train the model. Defaults to</span>
+<span class="sd">            :class:`~trieste.models.optimizer.TFOptimizer` with :class:`~tf.optimizers.Adam` with</span>
+<span class="sd">            batch size 100.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">TFOptimizer</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+
+        <span class="c1"># GPflow stores num_data as a number. However, since we want to be able to update it</span>
+        <span class="c1"># without having to retrace the acquisition functions, put it in a Variable instead.</span>
+        <span class="c1"># So that the elbo method doesn&#39;t fail we also need to turn it into a property.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">SVGPWrapper</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_num_data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">num_data</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">SVGPWrapper</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SparseVariational(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="SparseVariational.model"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.SparseVariational.model">[docs]</a>    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SVGP</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span></div>
+
+<div class="viewcode-block" id="SparseVariational.update"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.SparseVariational.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Hard-code asserts from _assert_data_is_compatible because model doesn&#39;t store dataset</span>
+        <span class="k">if</span> <span class="n">dataset</span><span class="o">.</span><span class="n">query_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">inducing_variable</span><span class="o">.</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Shape </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">query_points</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> of new query points is incompatible with&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">inducing_variable</span><span class="o">.</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> of existing query points.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; Trailing dimensions must match.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dataset</span><span class="o">.</span><span class="n">observations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">q_mu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Shape </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">observations</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> of new observations is incompatible with&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; shape </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">q_mu</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> of existing observations. Trailing&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; dimensions must match.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">num_data</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">query_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">num_data</span> <span class="o">=</span> <span class="n">num_data</span></div></div>
+
+
+<div class="viewcode-block" id="VGPWrapper"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.VGPWrapper">[docs]</a><span class="k">class</span> <span class="nc">VGPWrapper</span><span class="p">(</span><span class="n">VGP</span><span class="p">,</span> <span class="n">NumDataPropertyMixin</span><span class="p">):</span></div>
+    <span class="sd">&quot;&quot;&quot;A wrapper around GPFlow&#39;s VGP class that stores num_data in a tf.Variable and exposes</span>
+<span class="sd">    it as a property.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="VariationalGaussianProcess"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.VariationalGaussianProcess">[docs]</a><span class="k">class</span> <span class="nc">VariationalGaussianProcess</span><span class="p">(</span><span class="n">GPflowPredictor</span><span class="p">,</span> <span class="n">TrainableProbabilisticModel</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`TrainableProbabilisticModel` wrapper for a GPflow :class:`~gpflow.models.VGP`.</span>
+
+<span class="sd">    A Variational Gaussian Process (VGP) approximates the posterior of a GP</span>
+<span class="sd">    using the multivariate Gaussian closest to the posterior of the GP by minimizing the</span>
+<span class="sd">    KL divergence between approximated and exact posteriors. See :cite:`opper2009variational`</span>
+<span class="sd">    for details.</span>
+
+<span class="sd">    The VGP provides (approximate) GP modelling under non-Gaussian likelihoods, for example</span>
+<span class="sd">    when fitting a classification model over binary data.</span>
+
+<span class="sd">    A whitened representation and (optional) natural gradient steps are used to aid</span>
+<span class="sd">    model optimization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">VGP</span><span class="p">,</span>
+        <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_natgrads</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">natgrad_gamma</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param model: The GPflow :class:`~gpflow.models.VGP`.</span>
+<span class="sd">        :param optimizer: The optimizer with which to train the model. Defaults to</span>
+<span class="sd">            :class:`~trieste.models.optimizer.Optimizer` with :class:`~gpflow.optimizers.Scipy`.</span>
+<span class="sd">        :param use_natgrads: If True then alternate model optimization steps with natural</span>
+<span class="sd">            gradient updates. Note that natural gradients requires</span>
+<span class="sd">            an :class:`~trieste.models.optimizer.Optimizer` optimizer.</span>
+<span class="sd">        :natgrad_gamma: Gamma parameter for the natural gradient optimizer.</span>
+<span class="sd">        :raise ValueError (or InvalidArgumentError): If ``model``&#39;s :attr:`q_sqrt` is not rank 3</span>
+<span class="sd">            or if attempting to combine natural gradients with a :class:`~gpflow.optimizers.Scipy`</span>
+<span class="sd">            optimizer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">debugging</span><span class="o">.</span><span class="n">assert_rank</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">q_sqrt</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+
+        <span class="k">if</span> <span class="n">use_natgrads</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span><span class="p">,</span> <span class="n">TFOptimizer</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    Natgrads can only be used alongside an optimizer from tf.optimizers however</span>
+<span class="s2">                    received f</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_optimizer</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">                    &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">natgrad_gamma</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="k">if</span> <span class="n">natgrad_gamma</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">natgrad_gamma</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">natgrad_gamma</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    natgrad_gamma is only to be specified when use_natgrads is True.</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_natgrads</span> <span class="o">=</span> <span class="n">use_natgrads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_natgrad_gamma</span> <span class="o">=</span> <span class="n">natgrad_gamma</span>
+
+        <span class="c1"># GPflow stores num_data as a number. However, since we want to be able to update it</span>
+        <span class="c1"># without having to retrace the acquisition functions, put it in a Variable instead.</span>
+        <span class="c1"># So that the elbo method doesn&#39;t fail we also need to turn it into a property.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">VGPWrapper</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_num_data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">num_data</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float64</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">VGPWrapper</span>
+
+        <span class="c1"># GPflow stores the data in Tensors. However, since we want to be able to update the data</span>
+        <span class="c1"># without having to retrace the acquisition functions, put it in Variables instead.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+            <span class="p">),</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;VariationalGaussianProcess(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="VariationalGaussianProcess.model"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.VariationalGaussianProcess.model">[docs]</a>    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VGP</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span></div>
+
+<div class="viewcode-block" id="VariationalGaussianProcess.update"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.VariationalGaussianProcess.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">jitter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULTS</span><span class="o">.</span><span class="n">JITTER</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the model given the specified ``dataset``. Does not train the model.</span>
+
+<span class="sd">        :param dataset: The data with which to update the model.</span>
+<span class="sd">        :param jitter: The size of the jitter to use when stabilizing the Cholesky decomposition of</span>
+<span class="sd">            the covariance matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">assert_data_is_compatible</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+
+        <span class="n">f_mu</span><span class="p">,</span> <span class="n">f_cov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict_f</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">query_points</span><span class="p">,</span> <span class="n">full_cov</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># [N, L], [L, N, N]</span>
+
+        <span class="c1"># GPflow&#39;s VGP model is hard-coded to use the whitened representation, i.e.</span>
+        <span class="c1"># q_mu and q_sqrt parametrise q(v), and u = f(X) = L v, where L = cholesky(K(X, X))</span>
+        <span class="c1"># Hence we need to back-transform from f_mu and f_cov to obtain the updated</span>
+        <span class="c1"># new_q_mu and new_q_sqrt:</span>
+        <span class="n">Knn</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">query_points</span><span class="p">,</span> <span class="n">full_cov</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># [N, N]</span>
+        <span class="n">jitter_mat</span> <span class="o">=</span> <span class="n">jitter</span> <span class="o">*</span> <span class="n">tf</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">Knn</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">Lnn</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">Knn</span> <span class="o">+</span> <span class="n">jitter_mat</span><span class="p">)</span>  <span class="c1"># [N, N]</span>
+        <span class="n">new_q_mu</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">triangular_solve</span><span class="p">(</span><span class="n">Lnn</span><span class="p">,</span> <span class="n">f_mu</span><span class="p">)</span>  <span class="c1"># [N, L]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">triangular_solve</span><span class="p">(</span><span class="n">Lnn</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span> <span class="n">f_cov</span><span class="p">)</span>  <span class="c1"># [L, N, N], L⁻¹ f_cov</span>
+        <span class="n">S_v</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">triangular_solve</span><span class="p">(</span><span class="n">Lnn</span><span class="p">[</span><span class="kc">None</span><span class="p">],</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_transpose</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span>  <span class="c1"># [L, N, N]</span>
+        <span class="n">new_q_sqrt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">S_v</span> <span class="o">+</span> <span class="n">jitter_mat</span><span class="p">)</span>  <span class="c1"># [L, N, N]</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">query_points</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">observations</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">num_data</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">q_mu</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">new_q_mu</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">q_sqrt</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">new_q_sqrt</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">gpflow</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">triangular</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="VariationalGaussianProcess.optimize"><a class="viewcode-back" href="../../../../autoapi/trieste/models/gpflow/models/index.html#trieste.models.gpflow.VariationalGaussianProcess.optimize">[docs]</a>    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :class:`VariationalGaussianProcess` has a custom `optimize` method that (optionally) permits</span>
+<span class="sd">        alternating between standard optimization steps (for kernel parameters) and natural gradient</span>
+<span class="sd">        steps for the variational parameters (`q_mu` and `q_sqrt`). See :cite:`salimbeni2018natural`</span>
+<span class="sd">        for details. Using natural gradients can dramatically speed up model fitting, especially for</span>
+<span class="sd">        ill-conditioned posteriors.</span>
+
+<span class="sd">        If using natural gradients, our optimizer inherits the mini-batch behavior and number</span>
+<span class="sd">        of optimization steps as the base optimizer specified when initializing</span>
+<span class="sd">        the :class:`VariationalGaussianProcess`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_natgrads</span><span class="p">:</span>  <span class="c1"># optimize variational params with natgrad optimizer</span>
+
+            <span class="n">natgrad_optimizer</span> <span class="o">=</span> <span class="n">gpflow</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">NaturalGradient</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_natgrad_gamma</span><span class="p">)</span>
+            <span class="n">base_optimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span>
+
+            <span class="n">gpflow</span><span class="o">.</span><span class="n">set_trainable</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">q_mu</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>  <span class="c1"># variational params optimized by natgrad</span>
+            <span class="n">gpflow</span><span class="o">.</span><span class="n">set_trainable</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">q_sqrt</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">variational_params</span> <span class="o">=</span> <span class="p">[(</span><span class="n">model</span><span class="o">.</span><span class="n">q_mu</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">q_sqrt</span><span class="p">)]</span>
+            <span class="n">model_params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">trainable_variables</span>
+
+            <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">base_optimizer</span><span class="o">.</span><span class="n">create_loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+            <span class="nd">@jit</span><span class="p">(</span><span class="n">apply</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">perform_optimization_step</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># alternate with natgrad optimizations</span>
+                <span class="n">natgrad_optimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">variational_params</span><span class="p">)</span>
+                <span class="n">base_optimizer</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
+                    <span class="n">loss_fn</span><span class="p">,</span> <span class="n">model_params</span><span class="p">,</span> <span class="o">**</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">minimize_args</span>
+                <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+                <span class="n">perform_optimization_step</span><span class="p">()</span>
+
+            <span class="n">gpflow</span><span class="o">.</span><span class="n">set_trainable</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">q_mu</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>  <span class="c1"># revert varitional params to trainable</span>
+            <span class="n">gpflow</span><span class="o">.</span><span class="n">set_trainable</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">q_sqrt</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span></div></div>
+</pre></div>
+
+              </div>
+              
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2020 The Trieste Contributors
+
+Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

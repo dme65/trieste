@@ -1,0 +1,211 @@
+:py:mod:`trieste.acquisition.rule`
+==================================
+
+.. py:module:: trieste.acquisition.rule
+
+.. autoapi-nested-parse::
+
+   This module contains acquisition rules, which choose the optimal point(s) to query on each step of
+   the Bayesian optimization process.
+
+
+
+Module Contents
+---------------
+
+.. py:data:: T_co
+   
+
+   Unbound covariant type variable. 
+
+
+.. py:data:: SP_contra
+   
+
+   Contravariant type variable bound to :class:`~trieste.space.SearchSpace`. 
+
+
+.. py:class:: AcquisitionRule
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`Generic`\ [\ :py:obj:`T_co`\ , :py:obj:`SP_contra`\ ]
+
+   The central component of the acquisition API.
+
+   An :class:`AcquisitionRule` can produce any value from the search space for this step, and the
+   historic data and models. This value is typically a set of query points, either on its own as
+   a `TensorType` (see e.g. :class:`EfficientGlobalOptimization`), or within some context
+   (see e.g. :class:`TrustRegion`). Indeed, to use an :class:`AcquisitionRule` in the main
+   :class:`~trieste.bayesian_optimizer.BayesianOptimizer` Bayesian optimization loop, the rule
+   must return either a `TensorType` or `State`-ful `TensorType`.
+
+   .. py:method:: acquire(self, search_space: SP_contra, datasets: collections.abc.Mapping[str, trieste.data.Dataset], models: collections.abc.Mapping[str, trieste.models.ProbabilisticModel]) -> T_co
+      :abstractmethod:
+
+      Return a value of type `T_co`. Typically this will be a set of query points, either on its
+      own as a `TensorType` (see e.g. :class:`EfficientGlobalOptimization`), or within some
+      context (see e.g. :class:`TrustRegion`).
+
+      **Type hints:**
+        - The search space must be a :class:`~trieste.space.SearchSpace`. The exact type of
+          :class:`~trieste.space.SearchSpace` depends on the specific :class:`AcquisitionRule`.
+
+      :param search_space: The local acquisition search space for *this step*.
+      :param datasets: The known observer query points and observations for each tag.
+      :param models: The model to use for each :class:`~trieste.data.Dataset` in ``datasets``
+          (matched by tag).
+      :return: A value of type `T_co`.
+
+
+   .. py:method:: acquire_single(self, search_space: SP_contra, dataset: trieste.data.Dataset, model: trieste.models.ProbabilisticModel) -> T_co
+
+      A convenience wrapper for :meth:`acquire` that uses only one model, dataset pair.
+
+      :param search_space: The global search space over which the optimization problem
+          is defined.
+      :param dataset: The known observer query points and observations.
+      :param model: The model to use for the dataset.
+      :return: A value of type `T_co`.
+
+
+
+.. py:class:: EfficientGlobalOptimization(builder: Optional[AcquisitionFunctionBuilder | GreedyAcquisitionFunctionBuilder | SingleModelAcquisitionBuilder | SingleModelGreedyAcquisitionBuilder] = None, optimizer: AcquisitionOptimizer[SP_contra] | None = None, num_query_points: int = 1)
+
+   Bases: :py:obj:`AcquisitionRule`\ [\ :py:obj:`trieste.types.TensorType`\ , :py:obj:`SP_contra`\ ]
+
+   Implements the Efficient Global Optimization, or EGO, algorithm.
+
+   :param builder: The acquisition function builder to use. Defaults to
+       :class:`~trieste.acquisition.ExpectedImprovement`.
+   :param optimizer: The optimizer with which to optimize the acquisition function built by
+       ``builder``. This should *maximize* the acquisition function, and must be compatible
+       with the global search space. Defaults to
+       :func:`~trieste.acquisition.optimizer.automatic_optimizer_selector`.
+   :param num_query_points: The number of points to acquire.
+
+   .. py:method:: acquire(self, search_space: SP_contra, datasets: collections.abc.Mapping[str, trieste.data.Dataset], models: collections.abc.Mapping[str, trieste.models.ProbabilisticModel]) -> trieste.types.TensorType
+
+      Return the query point(s) that optimizes the acquisition function produced by ``builder``
+      (see :meth:`__init__`).
+
+      :param search_space: The local acquisition search space for *this step*.
+      :param datasets: The known observer query points and observations.
+      :param models: The models of the specified ``datasets``.
+      :return: The single (or batch of) points to query.
+
+
+
+.. py:class:: DiscreteThompsonSampling(num_search_space_samples: int, num_query_points: int, num_fourier_features: Optional[int] = None)
+
+   Bases: :py:obj:`AcquisitionRule`\ [\ :py:obj:`trieste.types.TensorType`\ , :py:obj:`trieste.space.SearchSpace`\ ]
+
+   Implements Thompson sampling for choosing optimal points.
+
+   This rule returns the minimizers of functions sampled from our model and evaluated across
+   a discretization of the search space (containing `N` candidate points).
+
+   The model is sampled either exactly (with an :math:`O(N^3)` complexity), or sampled
+   approximately through a random Fourier `M` feature decompisition
+   (with an :math:`O(\min(n^3,M^3))` complexity for a model trained on `n` points).
+
+
+   :param num_search_space_samples: The number of points at which to sample the posterior.
+   :param num_query_points: The number of points to acquire.
+   :num_fourier_features: The number of features used to approximate the kernel. We
+       recommend first trying 1000 features, as this typically perfoms well for a wide
+       range of kernels. If None, then we perfom exact Thompson sampling.
+
+   .. py:method:: acquire(self, search_space: trieste.space.SearchSpace, datasets: collections.abc.Mapping[str, trieste.data.Dataset], models: collections.abc.Mapping[str, trieste.models.ProbabilisticModel]) -> trieste.types.TensorType
+
+      Sample `num_search_space_samples` (see :meth:`__init__`) points from the
+      ``search_space``. Of those points, return the `num_query_points` points at which
+      random samples yield the **minima** of the model posterior.
+
+      :param search_space: The local acquisition search space for *this step*.
+      :param datasets: Unused.
+      :param models: The model of the known data. Uses the single key `OBJECTIVE`.
+      :return: The ``num_query_points`` points to query.
+      :raise ValueError: If ``models`` do not contain the key `OBJECTIVE`, or it contains any
+          other key.
+
+
+
+.. py:class:: TrustRegion(rule: AcquisitionRule[TensorType, Box] | None = None, beta: float = 0.7, kappa: float = 0.0001)
+
+   Bases: :py:obj:`AcquisitionRule`\ [\ :py:obj:`trieste.types.State`\ [\ :py:obj:`Optional`\ [\ :py:obj:`TrustRegion`\ ]\ , :py:obj:`trieste.types.TensorType`\ ]\ , :py:obj:`trieste.space.Box`\ ]
+
+   Implements the *trust region* acquisition algorithm.
+
+   :param rule: The acquisition rule that defines how to search for a new query point in a
+       given search space. Defaults to :class:`EfficientGlobalOptimization` with default
+       arguments.
+   :param beta: The inverse of the trust region contraction factor.
+   :param kappa: Scales the threshold for the minimal improvement required for a step to be
+       considered a success.
+
+   .. py:class:: State
+
+      The acquisition state for the :class:`TrustRegion` acquisition rule.
+
+      .. py:attribute:: acquisition_space
+         :annotation: :trieste.space.Box
+
+         The search space. 
+
+
+      .. py:attribute:: eps
+         :annotation: :trieste.types.TensorType
+
+         The (maximum) vector from the current best point to each bound of the acquisition space.
+
+
+      .. py:attribute:: y_min
+         :annotation: :trieste.types.TensorType
+
+         The minimum observed value. 
+
+
+      .. py:attribute:: is_global
+         :annotation: :bool | TensorType
+
+         `True` if the search space was global, else `False` if it was local. May be a scalar boolean
+         `TensorType` instead of a `bool`.
+
+
+
+   .. py:method:: acquire(self, search_space: trieste.space.Box, datasets: collections.abc.Mapping[str, trieste.data.Dataset], models: collections.abc.Mapping[str, trieste.models.ProbabilisticModel]) -> trieste.types.State[State | None, trieste.types.TensorType]
+
+      Construct a local search space from ``search_space`` according the trust region algorithm,
+      and use that with the ``rule`` specified at :meth:`~TrustRegion.__init__` to find new
+      query points. Return a function that constructs these points given a previous trust region
+      state.
+
+      If no ``state`` is specified (it is `None`), ``search_space`` is used as the search space
+      for this step.
+
+      If a ``state`` is specified, and the new optimum improves over the previous optimum
+      by some threshold (that scales linearly with ``kappa``), the previous acquisition is
+      considered successful.
+
+      If the previous acquisition was successful, ``search_space`` is used as the new
+      search space. If the previous step was unsuccessful, the search space is changed to the
+      trust region if it was global, and vice versa.
+
+      If the previous acquisition was over the trust region, the size of the trust region is
+      modified. If the previous acquisition was successful, the size is increased by a factor
+      ``1 / beta``. Conversely, if it was unsuccessful, the size is reduced by the factor
+      ``beta``.
+
+      **Note:** The acquisition search space will never extend beyond the boundary of the
+      ``search_space``. For a local search, the actual search space will be the
+      intersection of the trust region and ``search_space``.
+
+      :param search_space: The local acquisition search space for *this step*.
+      :param datasets: The known observer query points and observations. Uses the data for key
+          `OBJECTIVE` to calculate the new trust region.
+      :param models: The models of the specified ``datasets``.
+      :return: A function that constructs the next acquisition state and the recommended query
+          points from the previous acquisition state.
+      :raise KeyError: If ``datasets`` does not contain the key `OBJECTIVE`.
+
+
+

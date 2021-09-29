@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trieste.bayesian_optimizer &#8212; trieste 0.7.0 documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../index.html">
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../index.html">
+  Trieste
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../autoapi/trieste/index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../tutorials.html">
+  Tutorials
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/secondmind-labs/trieste" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for trieste.bayesian_optimizer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2021 The Trieste Contributors</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains the :class:`BayesianOptimizer` class, used to perform Bayesian optimization.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">absl</span> <span class="kn">import</span> <span class="n">logging</span>
+
+<span class="kn">from</span> <span class="nn">.acquisition.rule</span> <span class="kn">import</span> <span class="n">AcquisitionRule</span><span class="p">,</span> <span class="n">EfficientGlobalOptimization</span>
+<span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">ModelSpec</span><span class="p">,</span> <span class="n">TrainableProbabilisticModel</span><span class="p">,</span> <span class="n">create_model</span>
+<span class="kn">from</span> <span class="nn">.observer</span> <span class="kn">import</span> <span class="n">OBJECTIVE</span><span class="p">,</span> <span class="n">Observer</span>
+<span class="kn">from</span> <span class="nn">.space</span> <span class="kn">import</span> <span class="n">SearchSpace</span>
+<span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">State</span><span class="p">,</span> <span class="n">TensorType</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">Err</span><span class="p">,</span> <span class="n">Ok</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">map_values</span>
+
+<div class="viewcode-block" id="S"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.S">[docs]</a><span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span></div>
+<span class="sd">&quot;&quot;&quot; Unbound type variable. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SP"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.SP">[docs]</a><span class="n">SP</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;SP&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">SearchSpace</span><span class="p">)</span></div>
+<span class="sd">&quot;&quot;&quot; Type variable bound to :class:`SearchSpace`. &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Record"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.Record">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Record</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Container to record the state of each step of the optimization process.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Record.datasets"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.Record.datasets">[docs]</a>    <span class="n">datasets</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot; The known data from the observer. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Record.models"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.Record.models">[docs]</a>    <span class="n">models</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TrainableProbabilisticModel</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot; The models over the :attr:`datasets`. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Record.acquisition_state"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.Record.acquisition_state">[docs]</a>    <span class="n">acquisition_state</span><span class="p">:</span> <span class="n">S</span> <span class="o">|</span> <span class="kc">None</span></div>
+    <span class="sd">&quot;&quot;&quot; The acquisition state. &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Record.dataset"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.Record.dataset">[docs]</a>    <span class="k">def</span> <span class="nf">dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;The dataset when there is just one dataset.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a single dataset, found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Record.model"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.Record.model">[docs]</a>    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TrainableProbabilisticModel</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;The model when there is just one dataset.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a single dataset, found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># this should be a generic NamedTuple, but mypy doesn&#39;t support them</span>
+<span class="c1">#  https://github.com/python/mypy/issues/685</span>
+<div class="viewcode-block" id="OptimizationResult"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.OptimizationResult">[docs]</a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">OptimizationResult</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">S</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;The final result, and the historical data of the optimization process.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OptimizationResult.final_result"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.OptimizationResult.final_result">[docs]</a>    <span class="n">final_result</span><span class="p">:</span> <span class="n">Result</span><span class="p">[</span><span class="n">Record</span><span class="p">[</span><span class="n">S</span><span class="p">]]</span></div>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The final result of the optimization process. This contains either a :class:`Record` or an</span>
+<span class="sd">    exception.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OptimizationResult.history"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.OptimizationResult.history">[docs]</a>    <span class="n">history</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Record</span><span class="p">[</span><span class="n">S</span><span class="p">]]</span></div>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The history of the :class:`Record`\ s from each step of the optimization process. These</span>
+<span class="sd">    :class:`Record`\ s are created at the *start* of each loop, and as such will never include the</span>
+<span class="sd">    :attr:`final_result`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OptimizationResult.astuple"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.OptimizationResult.astuple">[docs]</a>    <span class="k">def</span> <span class="nf">astuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Result</span><span class="p">[</span><span class="n">Record</span><span class="p">[</span><span class="n">S</span><span class="p">]],</span> <span class="nb">list</span><span class="p">[</span><span class="n">Record</span><span class="p">[</span><span class="n">S</span><span class="p">]]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Note:** In contrast to the standard library function :func:`dataclasses.astuple`, this</span>
+<span class="sd">        method does *not* deepcopy instance attributes.</span>
+
+<span class="sd">        :return: The :attr:`final_result` and :attr:`history` as a 2-tuple.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_result</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div>
+
+<div class="viewcode-block" id="OptimizationResult.try_get_final_datasets"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.OptimizationResult.try_get_final_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">try_get_final_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience method to attempt to get the final data.</span>
+
+<span class="sd">        :return: The final data, if the optimization completed successfully.</span>
+<span class="sd">        :raise Exception: If an exception occurred during optimization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_result</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span><span class="o">.</span><span class="n">datasets</span></div>
+
+<div class="viewcode-block" id="OptimizationResult.try_get_final_dataset"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.OptimizationResult.try_get_final_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">try_get_final_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience method to attempt to get the final data for a single dataset run.</span>
+
+<span class="sd">        :return: The final data, if the optimization completed successfully.</span>
+<span class="sd">        :raise Exception: If an exception occurred during optimization.</span>
+<span class="sd">        :raise ValueError: If the optimization was not a single dataset run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">try_get_final_datasets</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected a single dataset, found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OptimizationResult.try_get_final_models"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.OptimizationResult.try_get_final_models">[docs]</a>    <span class="k">def</span> <span class="nf">try_get_final_models</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TrainableProbabilisticModel</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience method to attempt to get the final models.</span>
+
+<span class="sd">        :return: The final models, if the optimization completed successfully.</span>
+<span class="sd">        :raise Exception: If an exception occurred during optimization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_result</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span><span class="o">.</span><span class="n">models</span></div>
+
+<div class="viewcode-block" id="OptimizationResult.try_get_final_model"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.OptimizationResult.try_get_final_model">[docs]</a>    <span class="k">def</span> <span class="nf">try_get_final_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TrainableProbabilisticModel</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience method to attempt to get the final model for a single model run.</span>
+
+<span class="sd">        :return: The final model, if the optimization completed successfully.</span>
+<span class="sd">        :raise Exception: If an exception occurred during optimization.</span>
+<span class="sd">        :raise ValueError: If the optimization was not a single model run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">models</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">try_get_final_models</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected single model, found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="BayesianOptimizer"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.BayesianOptimizer">[docs]</a><span class="k">class</span> <span class="nc">BayesianOptimizer</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">SP</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class performs Bayesian optimization, the data-efficient optimization of an expensive</span>
+<span class="sd">    black-box *objective function* over some *search space*. Since we may not have access to the</span>
+<span class="sd">    objective function itself, we speak instead of an *observer* that observes it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observer</span><span class="p">:</span> <span class="n">Observer</span><span class="p">,</span> <span class="n">search_space</span><span class="p">:</span> <span class="n">SP</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param observer: The observer of the objective function.</span>
+<span class="sd">        :param search_space: The space over which to search. Must be a</span>
+<span class="sd">            :class:`~trieste.space.SearchSpace`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observer</span> <span class="o">=</span> <span class="n">observer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_search_space</span> <span class="o">=</span> <span class="n">search_space</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;BayesianOptimizer(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_observer</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_space</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+
+    <span class="nd">@overload</span>
+<div class="viewcode-block" id="BayesianOptimizer.optimize"><a class="viewcode-back" href="../../autoapi/trieste/bayesian_optimizer/index.html#trieste.bayesian_optimizer.BayesianOptimizer.optimize">[docs]</a>    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">],</span>
+        <span class="n">model_specs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelSpec</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">track_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fit_initial_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizationResult</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+        <span class="o">...</span></div>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">],</span>
+        <span class="n">model_specs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelSpec</span><span class="p">],</span>
+        <span class="n">acquisition_rule</span><span class="p">:</span> <span class="n">AcquisitionRule</span><span class="p">[</span><span class="n">TensorType</span><span class="p">,</span> <span class="n">SP</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">track_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fit_initial_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="c1"># this should really be OptimizationResult[None], but tf.Tensor is untyped so the type</span>
+        <span class="c1"># checker can&#39;t differentiate between TensorType and State[S | None, TensorType], and</span>
+        <span class="c1"># the return types clash. object is close enough to None that object will do.</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizationResult</span><span class="p">[</span><span class="nb">object</span><span class="p">]:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">],</span>
+        <span class="n">model_specs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelSpec</span><span class="p">],</span>
+        <span class="n">acquisition_rule</span><span class="p">:</span> <span class="n">AcquisitionRule</span><span class="p">[</span><span class="n">State</span><span class="p">[</span><span class="n">S</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">TensorType</span><span class="p">],</span> <span class="n">SP</span><span class="p">],</span>
+        <span class="n">acquisition_state</span><span class="p">:</span> <span class="n">S</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">track_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fit_initial_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizationResult</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">model_specs</span><span class="p">:</span> <span class="n">ModelSpec</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">track_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fit_initial_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizationResult</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">model_specs</span><span class="p">:</span> <span class="n">ModelSpec</span><span class="p">,</span>
+        <span class="n">acquisition_rule</span><span class="p">:</span> <span class="n">AcquisitionRule</span><span class="p">[</span><span class="n">TensorType</span><span class="p">,</span> <span class="n">SP</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">track_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fit_initial_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizationResult</span><span class="p">[</span><span class="nb">object</span><span class="p">]:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">model_specs</span><span class="p">:</span> <span class="n">ModelSpec</span><span class="p">,</span>
+        <span class="n">acquisition_rule</span><span class="p">:</span> <span class="n">AcquisitionRule</span><span class="p">[</span><span class="n">State</span><span class="p">[</span><span class="n">S</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">TensorType</span><span class="p">],</span> <span class="n">SP</span><span class="p">],</span>
+        <span class="n">acquisition_state</span><span class="p">:</span> <span class="n">S</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">track_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fit_initial_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizationResult</span><span class="p">[</span><span class="n">S</span><span class="p">]:</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">]</span> <span class="o">|</span> <span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">model_specs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelSpec</span><span class="p">]</span> <span class="o">|</span> <span class="n">ModelSpec</span><span class="p">,</span>
+        <span class="n">acquisition_rule</span><span class="p">:</span> <span class="n">AcquisitionRule</span><span class="p">[</span><span class="n">TensorType</span> <span class="o">|</span> <span class="n">State</span><span class="p">[</span><span class="n">S</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">TensorType</span><span class="p">],</span> <span class="n">SP</span><span class="p">]</span>
+        <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">acquisition_state</span><span class="p">:</span> <span class="n">S</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">track_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">fit_initial_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizationResult</span><span class="p">[</span><span class="n">S</span><span class="p">]</span> <span class="o">|</span> <span class="n">OptimizationResult</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempt to find the minimizer of the ``observer`` in the ``search_space`` (both specified at</span>
+<span class="sd">        :meth:`__init__`). This is the central implementation of the Bayesian optimization loop.</span>
+
+<span class="sd">        For each step in ``num_steps``, this method:</span>
+<span class="sd">            - Finds the next points with which to query the ``observer`` using the</span>
+<span class="sd">              ``acquisition_rule``&#39;s :meth:`acquire` method, passing it the ``search_space``,</span>
+<span class="sd">              ``datasets``, models built from the ``model_specs``, and current acquisition state.</span>
+<span class="sd">            - Queries the ``observer`` *once* at those points.</span>
+<span class="sd">            - Updates the datasets and models with the data from the ``observer``.</span>
+
+<span class="sd">        If any errors are raised during the optimization loop, this method will catch and return</span>
+<span class="sd">        them instead, along with the history of the optimization process, and print a message (using</span>
+<span class="sd">        `absl` at level `logging.ERROR`).</span>
+
+<span class="sd">        **Note:** While the :class:`~trieste.models.TrainableProbabilisticModel` interface implies</span>
+<span class="sd">        mutable models, it is *not* guaranteed that the model passed to :meth:`optimize` will</span>
+<span class="sd">        be updated during the optimization process. For example, if ``track_state`` is `True`, a</span>
+<span class="sd">        copied model will be used on each optimization step. Use the models in the return value for</span>
+<span class="sd">        reliable access to the updated models.</span>
+
+<span class="sd">        **Type hints:**</span>
+<span class="sd">            - The ``acquisition_rule`` must use the same type of</span>
+<span class="sd">              :class:`~trieste.space.SearchSpace` as specified in :meth:`__init__`.</span>
+<span class="sd">            - The ``acquisition_state`` must be of the type expected by the ``acquisition_rule``.</span>
+<span class="sd">              Any acquisition state in the optimization result will also be of this type.</span>
+
+<span class="sd">        :param num_steps: The number of optimization steps to run.</span>
+<span class="sd">        :param datasets: The known observer query points and observations for each tag.</span>
+<span class="sd">        :param model_specs: The model to use for each :class:`~trieste.data.Dataset` in</span>
+<span class="sd">            ``datasets``.</span>
+<span class="sd">        :param acquisition_rule: The acquisition rule, which defines how to search for a new point</span>
+<span class="sd">            on each optimization step. Defaults to</span>
+<span class="sd">            :class:`~trieste.acquisition.rule.EfficientGlobalOptimization` with default</span>
+<span class="sd">            arguments. Note that if the default is used, this implies the tags must be</span>
+<span class="sd">            `OBJECTIVE`, the search space can be any :class:`~trieste.space.SearchSpace`, and the</span>
+<span class="sd">            acquisition state returned in the :class:`OptimizationResult` will be `None`.</span>
+<span class="sd">        :param acquisition_state: The acquisition state to use on the first optimization step.</span>
+<span class="sd">            This argument allows the caller to restore the optimization process from an existing</span>
+<span class="sd">            :class:`Record`.</span>
+<span class="sd">        :param track_state: If `True`, this method saves the optimization state at the start of each</span>
+<span class="sd">            step. Models and acquisition state are copied using `copy.deepcopy`.</span>
+<span class="sd">        :param fit_initial_model: If `False`, this method assumes that the initial models have</span>
+<span class="sd">            already been optimized on the datasets and so do not require optimization before the</span>
+<span class="sd">            first optimization step.</span>
+<span class="sd">        :return: An :class:`OptimizationResult`. The :attr:`final_result` element contains either</span>
+<span class="sd">            the final optimization data, models and acquisition state, or, if an exception was</span>
+<span class="sd">            raised while executing the optimization loop, it contains the exception raised. In</span>
+<span class="sd">            either case, the :attr:`history` element is the history of the data, models and</span>
+<span class="sd">            acquisition state at the *start* of each optimization step (up to and including any step</span>
+<span class="sd">            that fails to complete). The history will never include the final optimization result.</span>
+<span class="sd">        :raise ValueError: If any of the following are true:</span>
+
+<span class="sd">            - ``num_steps`` is negative.</span>
+<span class="sd">            - the keys in ``datasets`` and ``model_specs`` do not match</span>
+<span class="sd">            - ``datasets`` or ``model_specs`` are empty</span>
+<span class="sd">            - the default `acquisition_rule` is used and the tags are not `OBJECTIVE`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+            <span class="n">datasets</span> <span class="o">=</span> <span class="p">{</span><span class="n">OBJECTIVE</span><span class="p">:</span> <span class="n">datasets</span><span class="p">}</span>
+            <span class="c1"># ignore below is due to MyPy not being able to handle overloads properly</span>
+            <span class="n">model_specs</span> <span class="o">=</span> <span class="p">{</span><span class="n">OBJECTIVE</span><span class="p">:</span> <span class="n">model_specs</span><span class="p">}</span>  <span class="c1"># type: ignore</span>
+
+        <span class="c1"># reassure the type checker that everything is tagged</span>
+        <span class="n">datasets</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">],</span> <span class="n">datasets</span><span class="p">)</span>
+        <span class="n">model_specs</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelSpec</span><span class="p">],</span> <span class="n">model_specs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num_steps</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num_steps must be at least 0, got </span><span class="si">{</span><span class="n">num_steps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">!=</span> <span class="n">model_specs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;datasets and model_specs should contain the same keys. Got </span><span class="si">{</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2"> and&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">model_specs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2"> respectively.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">datasets</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dicts of datasets and model_specs must be populated.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">acquisition_rule</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">!=</span> <span class="p">{</span><span class="n">OBJECTIVE</span><span class="p">}:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Default acquisition rule EfficientGlobalOptimization requires tag&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">OBJECTIVE</span><span class="si">!r}</span><span class="s2">, got keys </span><span class="si">{</span><span class="n">datasets</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">acquisition_rule</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">AcquisitionRule</span><span class="p">[</span><span class="n">TensorType</span><span class="p">,</span> <span class="n">SP</span><span class="p">],</span> <span class="n">EfficientGlobalOptimization</span><span class="p">())</span>
+
+        <span class="n">models</span> <span class="o">=</span> <span class="n">map_values</span><span class="p">(</span><span class="n">create_model</span><span class="p">,</span> <span class="n">model_specs</span><span class="p">)</span>
+        <span class="n">history</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Record</span><span class="p">[</span><span class="n">S</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">track_state</span><span class="p">:</span>
+                    <span class="n">models_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">models</span><span class="p">)</span>
+                    <span class="n">acquisition_state_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">acquisition_state</span><span class="p">)</span>
+                    <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Record</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">models_copy</span><span class="p">,</span> <span class="n">acquisition_state_copy</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">fit_initial_model</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span>
+                        <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+                        <span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+                <span class="n">points_or_stateful</span> <span class="o">=</span> <span class="n">acquisition_rule</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_space</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">models</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">points_or_stateful</span><span class="p">):</span>
+                    <span class="n">acquisition_state</span><span class="p">,</span> <span class="n">query_points</span> <span class="o">=</span> <span class="n">points_or_stateful</span><span class="p">(</span><span class="n">acquisition_state</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">query_points</span> <span class="o">=</span> <span class="n">points_or_stateful</span>
+
+                <span class="n">observer_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observer</span><span class="p">(</span><span class="n">query_points</span><span class="p">)</span>
+
+                <span class="n">tagged_output</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">observer_output</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observer_output</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span>
+                    <span class="k">else</span> <span class="p">{</span><span class="n">OBJECTIVE</span><span class="p">:</span> <span class="n">observer_output</span><span class="p">}</span>
+                <span class="p">)</span>
+
+                <span class="n">datasets</span> <span class="o">=</span> <span class="p">{</span><span class="n">tag</span><span class="p">:</span> <span class="n">datasets</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">+</span> <span class="n">tagged_output</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tagged_output</span><span class="p">}</span>
+
+                <span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span>
+                    <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+                    <span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Optimization failed at step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">, encountered error with traceback:&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Terminating optimization and returning the optimization history. You may &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;be able to use the history to restart the process from a previous successful &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;optimization step.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">output_stream</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">OptimizationResult</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">error</span><span class="p">),</span> <span class="n">history</span><span class="p">)</span>
+
+        <span class="n">tf</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Optimization completed without errors&quot;</span><span class="p">,</span> <span class="n">output_stream</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+        <span class="n">record</span> <span class="o">=</span> <span class="n">Record</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">acquisition_state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OptimizationResult</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">record</span><span class="p">),</span> <span class="n">history</span><span class="p">)</span></div>
+</pre></div>
+
+              </div>
+              
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2020 The Trieste Contributors
+
+Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+.<br/>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

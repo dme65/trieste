@@ -1,0 +1,71 @@
+:orphan:
+
+:py:mod:`trieste.models.config`
+===============================
+
+.. py:module:: trieste.models.config
+
+
+Module Contents
+---------------
+
+.. py:class:: ModelConfig
+
+   This class is a specification for building a
+   :class:`~trieste.models.TrainableProbabilisticModel`. It is not meant to be used by itself,
+   subclasses that implement the missing asbtract methods should be used instead. These abstract
+   methods define a default optimizer and all models supported by a specific model type (e.g.
+   Gaussian processes implementation). Note that subclasses should also be frozen dataclasses.
+
+   .. py:attribute:: model
+      :annotation: :tf.Module | TrainableProbabilisticModel
+
+      The :class:`~trieste.models.TrainableProbabilisticModel`, or the model to wrap in one. 
+
+
+   .. py:attribute:: model_args
+      :annotation: :dict[str, Any]
+
+      The keyword arguments to pass to the model wrapper. 
+
+
+   .. py:attribute:: optimizer
+      :annotation: :Any
+
+      The optimizer with which to train the model (by minimizing its loss function). 
+
+
+   .. py:attribute:: optimizer_args
+      :annotation: :dict[str, Any]
+
+      The keyword arguments to pass to the optimizer wrapper. 
+
+
+   .. py:method:: supported_models(self) -> dict[Any, collections.abc.Callable[[Any, trieste.models.optimizer.Optimizer], trieste.models.interfaces.TrainableProbabilisticModel]]
+      :abstractmethod:
+
+      Defines all models supported by certain model type (e.g. Gaussian process implementation).
+      This method has to be specified by a model type specific subclass.
+
+      :return: A mapping of third-party model types to :class:`CustomTrainable` classes that wrap
+          models of those types.
+
+
+   .. py:method:: create_model_interface(self) -> trieste.models.interfaces.TrainableProbabilisticModel
+
+      :return: A model built from this model configuration.
+
+
+
+.. py:data:: ModelSpec
+   
+
+   Type alias for any type that can be used to fully specify a model. 
+
+
+.. py:function:: create_model(config: ModelSpec) -> trieste.models.interfaces.TrainableProbabilisticModel
+
+   :param config: A :class:`TrainableProbabilisticModel` or configuration of a model.
+   :return: A :class:`~trieste.models.TrainableProbabilisticModel` build according to ``config``.
+
+

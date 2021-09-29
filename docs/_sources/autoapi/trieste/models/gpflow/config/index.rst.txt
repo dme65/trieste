@@ -1,0 +1,28 @@
+:orphan:
+
+:py:mod:`trieste.models.gpflow.config`
+======================================
+
+.. py:module:: trieste.models.gpflow.config
+
+
+Module Contents
+---------------
+
+.. py:class:: GPflowModelConfig
+
+   Bases: :py:obj:`trieste.models.config.ModelConfig`
+
+   Specification for building a GPflow instance of
+   :class:`~trieste.models.TrainableProbabilisticModel`.
+
+   .. py:method:: supported_models(self) -> dict[Any, collections.abc.Callable[[Any, trieste.models.optimizer.Optimizer], trieste.models.interfaces.TrainableProbabilisticModel]]
+
+      Defines all models supported by certain model type (e.g. Gaussian process implementation).
+      This method has to be specified by a model type specific subclass.
+
+      :return: A mapping of third-party model types to :class:`CustomTrainable` classes that wrap
+          models of those types.
+
+
+

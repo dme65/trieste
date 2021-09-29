@@ -1,0 +1,191 @@
+:orphan:
+
+:py:mod:`trieste.models.interfaces`
+===================================
+
+.. py:module:: trieste.models.interfaces
+
+
+Module Contents
+---------------
+
+.. py:class:: ProbabilisticModel
+
+   Bases: :py:obj:`abc.ABC`
+
+   A probabilistic model.
+
+   .. py:method:: predict(self, query_points: trieste.types.TensorType) -> tuple[trieste.types.TensorType, trieste.types.TensorType]
+      :abstractmethod:
+
+      Return the mean and variance of the independent marginal distributions at each point in
+      ``query_points``.
+
+      This is essentially a convenience method for :meth:`predict_joint`, where non-event
+      dimensions of ``query_points`` are all interpreted as broadcasting dimensions instead of
+      batch dimensions, and the covariance is squeezed to remove redundant nesting.
+
+      :param query_points: The points at which to make predictions, of shape [..., D].
+      :return: The mean and variance of the independent marginal distributions at each point in
+          ``query_points``. For a predictive distribution with event shape E, the mean and
+          variance will both have shape [...] + E.
+
+
+   .. py:method:: predict_joint(self, query_points: trieste.types.TensorType) -> tuple[trieste.types.TensorType, trieste.types.TensorType]
+      :abstractmethod:
+
+      :param query_points: The points at which to make predictions, of shape [..., B, D].
+      :return: The mean and covariance of the joint marginal distribution at each batch of points
+          in ``query_points``. For a predictive distribution with event shape E, the mean will
+          have shape [..., B] + E, and the covariance shape [...] + E + [B, B].
+
+
+   .. py:method:: sample(self, query_points: trieste.types.TensorType, num_samples: int) -> trieste.types.TensorType
+      :abstractmethod:
+
+      Return ``num_samples`` samples from the independent marginal distributions at
+      ``query_points``.
+
+      :param query_points: The points at which to sample, with shape [..., N, D].
+      :param num_samples: The number of samples at each point.
+      :return: The samples. For a predictive distribution with event shape E, this has shape
+          [..., S, N] + E, where S is the number of samples.
+
+
+   .. py:method:: predict_y(self, query_points: trieste.types.TensorType) -> tuple[trieste.types.TensorType, trieste.types.TensorType]
+      :abstractmethod:
+
+      Return the mean and variance of the independent marginal distributions at each point in
+      ``query_points`` for the observations, including noise contributions.
+
+      Note that this is not supported by all models.
+
+      :param query_points: The points at which to make predictions, of shape [..., D].
+      :return: The mean and variance of the independent marginal distributions at each point in
+          ``query_points``. For a predictive distribution with event shape E, the mean and
+          variance will both have shape [...] + E.
+
+
+   .. py:method:: get_observation_noise(self) -> trieste.types.TensorType
+      :abstractmethod:
+
+      Return the variance of observation noise.
+
+      Note that this is not supported by all models.
+
+      :return: The observation noise.
+
+
+   .. py:method:: get_kernel(self) -> gpflow.kernels.Kernel
+      :abstractmethod:
+
+      Return the kernel of the model.
+      :return: The kernel.
+
+
+
+.. py:class:: TrainableProbabilisticModel
+
+   Bases: :py:obj:`ProbabilisticModel`
+
+   A trainable probabilistic model.
+
+   .. py:method:: update(self, dataset: trieste.data.Dataset) -> None
+      :abstractmethod:
+
+      Update the model given the specified ``dataset``. Does not train the model.
+
+      :param dataset: The data with which to update the model.
+
+
+   .. py:method:: optimize(self, dataset: trieste.data.Dataset) -> None
+      :abstractmethod:
+
+      Optimize the model objective with respect to (hyper)parameters given the specified
+      ``dataset``.
+
+      :param dataset: The data with which to train the model.
+
+
+
+.. py:class:: ModelStack(model_with_event_size: tuple[TrainableProbabilisticModel, int], *models_with_event_sizes: tuple[TrainableProbabilisticModel, int])
+
+   Bases: :py:obj:`TrainableProbabilisticModel`
+
+   A :class:`ModelStack` is a wrapper around a number of :class:`TrainableProbabilisticModel`\ s.
+   It combines the outputs of each model for predictions and sampling, and delegates training data
+   to each model for updates and optimization.
+
+   **Note:** Only supports vector outputs (i.e. with event shape [E]). Outputs for any two models
+   are assumed independent. Each model may itself be single- or multi-output, and any one
+   multi-output model may have dependence between its outputs. When we speak of *event size* in
+   this class, we mean the output dimension for a given :class:`TrainableProbabilisticModel`,
+   whether that is the :class:`ModelStack` itself, or one of the subsidiary
+   :class:`TrainableProbabilisticModel`\ s within the :class:`ModelStack`. Of course, the event
+   size for a :class:`ModelStack` will be the sum of the event sizes of each subsidiary model.
+
+   The order of individual models specified at :meth:`__init__` determines the order of the
+   :class:`ModelStack` output dimensions.
+
+   :param model_with_event_size: The first model, and the size of its output events.
+       **Note:** This is a separate parameter to ``models_with_event_sizes`` simply so that the
+       method signature requires at least one model. It is not treated specially.
+   :param \*models_with_event_sizes: The other models, and sizes of their output events.
+
+   .. py:method:: predict(self, query_points: trieste.types.TensorType) -> tuple[trieste.types.TensorType, trieste.types.TensorType]
+
+      :param query_points: The points at which to make predictions, of shape [..., D].
+      :return: The predictions from all the wrapped models, concatenated along the event axis in
+          the same order as they appear in :meth:`__init__`. If the wrapped models have predictive
+          distributions with event shapes [:math:`E_i`], the mean and variance will both have
+          shape [..., :math:`\sum_i E_i`].
+
+
+   .. py:method:: predict_joint(self, query_points: trieste.types.TensorType) -> tuple[trieste.types.TensorType, trieste.types.TensorType]
+
+      :param query_points: The points at which to make predictions, of shape [..., B, D].
+      :return: The predictions from all the wrapped models, concatenated along the event axis in
+          the same order as they appear in :meth:`__init__`. If the wrapped models have predictive
+          distributions with event shapes [:math:`E_i`], the mean will have shape
+          [..., B, :math:`\sum_i E_i`], and the covariance shape
+          [..., :math:`\sum_i E_i`, B, B].
+
+
+   .. py:method:: sample(self, query_points: trieste.types.TensorType, num_samples: int) -> trieste.types.TensorType
+
+      :param query_points: The points at which to sample, with shape [..., N, D].
+      :param num_samples: The number of samples at each point.
+      :return: The samples from all the wrapped models, concatenated along the event axis. For
+          wrapped models with predictive distributions with event shapes [:math:`E_i`], this has
+          shape [..., S, N, :math:`\sum_i E_i`], where S is the number of samples.
+
+
+   .. py:method:: predict_y(self, query_points: trieste.types.TensorType) -> tuple[trieste.types.TensorType, trieste.types.TensorType]
+
+      :param query_points: The points at which to make predictions, of shape [..., D].
+      :return: The predictions from all the wrapped models, concatenated along the event axis in
+          the same order as they appear in :meth:`__init__`. If the wrapped models have predictive
+          distributions with event shapes [:math:`E_i`], the mean and variance will both have
+          shape [..., :math:`\sum_i E_i`].
+      :raise NotImplementedError: If any of the models don't implement predict_y.
+
+
+   .. py:method:: update(self, dataset: trieste.data.Dataset) -> None
+
+      Update all the wrapped models on their corresponding data. The data for each model is
+      extracted by splitting the observations in ``dataset`` along the event axis according to the
+      event sizes specified at :meth:`__init__`.
+
+      :param dataset: The query points and observations for *all* the wrapped models.
+
+
+   .. py:method:: optimize(self, dataset: trieste.data.Dataset) -> None
+
+      Optimize all the wrapped models on their corresponding data. The data for each model is
+      extracted by splitting the observations in ``dataset`` along the event axis according to the
+      event sizes specified at :meth:`__init__`.
+
+      :param dataset: The query points and observations for *all* the wrapped models.
+
+
+

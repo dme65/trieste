@@ -1,0 +1,145 @@
+:py:mod:`trieste.models.optimizer`
+==================================
+
+.. py:module:: trieste.models.optimizer
+
+.. autoapi-nested-parse::
+
+   This module contains model optimizers. 
+
+
+
+Module Contents
+---------------
+
+.. py:data:: TrainingData
+   
+
+   Type alias for a batch, or batches, of training data. 
+
+
+.. py:data:: DatasetTransformer
+   
+
+   Type alias for a function that converts a :class:`~trieste.data.Dataset` to batches of training
+   data.
+
+
+.. py:data:: LossClosure
+   
+
+   Type alias for a loss closure, typically used in optimization. 
+
+
+.. py:data:: OptimizeResult
+   
+
+   Optimization result. For scipy optimizer it is :class:`~scipy.optimize.OptimizeResult`.
+   TensorFlow optimizer doesn't return any result.
+
+
+.. py:class:: Optimizer
+
+   Optimizer for training models with all the training data at once.
+
+   .. py:attribute:: optimizer
+      :annotation: :gpflow.optimizers.Scipy | tf.optimizers.Optimizer
+
+      The underlying optimizer to use. 
+
+
+   .. py:attribute:: minimize_args
+      :annotation: :dict[str, Any]
+
+      The keyword arguments to pass to the :meth:`minimize` method of the :attr:`optimizer`. 
+
+
+   .. py:attribute:: compile
+      :annotation: :bool = False
+
+      If `True`, the optimization process will be compiled with :func:`tf.function`. 
+
+
+   .. py:method:: create_loss(self, model: tensorflow.Module, dataset: trieste.data.Dataset) -> LossClosure
+
+      Build a loss function for the specified `model` with the `dataset`.
+
+      :param model: The model to build a loss function for.
+      :param dataset: The data with which to build the loss function.
+      :return: The loss function.
+
+
+   .. py:method:: optimize(self, model: tensorflow.Module, dataset: trieste.data.Dataset) -> OptimizeResult
+
+      Optimize the specified `model` with the `dataset`.
+
+      :param model: The model to optimize.
+      :param dataset: The data with which to optimize the `model`.
+      :return: The return value of the optimizer's :meth:`minimize` method.
+
+
+
+.. py:class:: TFOptimizer
+
+   Bases: :py:obj:`Optimizer`
+
+   Optimizer for training models with mini-batches of training data.
+
+   .. py:attribute:: max_iter
+      :annotation: :int = 100
+
+      The number of iterations over which to optimize the model. 
+
+
+   .. py:attribute:: batch_size
+      :annotation: :int | None
+
+      The size of the mini-batches. 
+
+
+   .. py:attribute:: dataset_builder
+      :annotation: :DatasetTransformer | None
+
+      A mapping from :class:`~trieste.observer.Observer` data to mini-batches. 
+
+
+   .. py:method:: create_loss(self, model: tensorflow.Module, dataset: trieste.data.Dataset) -> LossClosure
+
+      Build a loss function for the specified `model` with the `dataset`.
+
+      :param model: The model to build a loss function for.
+      :param dataset: The data with which to build the loss function.
+      :return: The loss function.
+
+
+   .. py:method:: optimize(self, model: tensorflow.Module, dataset: trieste.data.Dataset) -> None
+
+      Optimize the specified `model` with the `dataset`.
+
+      :param model: The model to optimize.
+      :param dataset: The data with which to optimize the `model`.
+
+
+
+.. py:function:: create_optimizer(optimizer: gpflow.optimizers.Scipy | tf.optimizers.Optimizer, optimizer_args: Dict[str, Any]) -> Optimizer
+
+   Generic function for creating a :class:`Optimizer` wrapper from a specified
+   `optimizer` and `optimizer_args`. The implementations depends on the type of the
+   underlying optimizer.
+
+   :param optimizer: The optimizer with which to train the model.
+   :param optimizer_args: The keyword arguments to pass to the optimizer wrapper..
+   :return: The :class:`Optimizer` wrapper.
+
+
+.. py:function:: create_loss_function(model: gpflow.models.GPModel, dataset: TrainingData, compile: bool = False) -> LossClosure
+
+   Generic function for building a loss function for a specified `model` and `dataset`.
+   The implementations depends on the type of the model.
+
+   :param model: The model to build a loss function for.
+   :param dataset: The data with which to build the loss function.
+   :param compile: Whether to compile with :func:`tf.function`.
+   :return: The loss function.
+
+
